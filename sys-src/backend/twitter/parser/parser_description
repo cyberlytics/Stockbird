@@ -1,0 +1,4 @@
+Diese Datei beschreibt, welches Format die einzelnen Parser verarbeiten können. Hierbei werden im folgenden die Parser
+numerisch durchnummeriert und die jeweiligen grund Formate, sowie die verwendeten Spalten angegeben.
+
+Parser 1 (parse_one):
