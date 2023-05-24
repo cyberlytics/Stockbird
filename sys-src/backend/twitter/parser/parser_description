@@ -2,3 +2,14 @@ Diese Datei beschreibt, welches Format die einzelnen Parser verarbeiten können.
 numerisch durchnummeriert und die jeweiligen grund Formate, sowie die verwendeten Spalten angegeben.
 
 Parser 1 (parse_one):
+
+Parser 2 (parser_two):  id                      (-),
+                        text                    (text),
+                        timestamp               (timestamp),
+                        verified                (user_verified),
+                        source                  (user_name),
+                        symbols                 (-),
+                        company_names           (-),
+                        url                     (-),
+                         -                      (retweets),
+                         -                      (user_followers)
