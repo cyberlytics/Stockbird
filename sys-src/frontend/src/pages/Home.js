@@ -39,7 +39,7 @@ export default function Home() {
                 <div className="Centered-div" id="Colored-search">
                     <form className="Stock-search">
                     <input id="symbol" type="text" placeholder="Search stocks by symbol (e. g. META)"></input>
-                    <Button variant="contained" onClick= {callAPI("META")}>OK</Button>
+                    <Button variant="contained" onClick={() => callAPI("META")}>OK</Button>
                     </form>
                 </div>
             </div>
