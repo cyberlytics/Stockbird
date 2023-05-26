@@ -42,6 +42,14 @@ export default function Home() {
                     <Button variant="contained" onClick= {callAPI("META")}>OK</Button>
                     </form>
                 </div>
+                <footer className="footer">
+                    <Typography variant='body2' align='center' gutterBottom>
+                    © 2023 Stockbird.
+                    </Typography>
+                    <Typography variant='subtitle2' align='center' color="textSecondary">
+                    Impressum
+                    </Typography>
+                </footer>
             </div>
         </>
     )
