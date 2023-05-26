@@ -28,15 +28,19 @@ function App() {
 
         <div className="App">
           <header className="App-header">
-            <img src={logo} alt="Stockbird Logo"/>
+            <img className="Centered-img" src={logo} alt="Stockbird Logo"/>
+            <div className="Centered-div">
+              <Typography variant="body1">
+                Welcome to Stockbird, where you can find out how relevant tweets influence the stock market.
+              </Typography>
+            </div>
           </header>
-            <body>
-            <form>
-                <label><Typography variant="body1">Search stocks:</Typography></label>
-                <input type="text" id="symbol"></input>
-                <Button variant="contained" onClick= {callAPI("META")}>OK</Button>
+          <div className="Centered-div" id="Colored-search">
+            <form className="Stock-search">
+              <input id="symbol" type="text" placeholder="Search stocks by symbol (e. g. META)"></input>
+              <Button variant="contained" onClick= {callAPI("META")}>OK</Button>
             </form>
-            </body>
+          </div>
         </div>
   );
 }
