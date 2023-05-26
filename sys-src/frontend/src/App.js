@@ -1,4 +1,7 @@
 import './App.css';
+import logo from './assets/Stockbird-Logo.png';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 function App() {
     var callAPI = (symbol)=>{
@@ -25,14 +28,13 @@ function App() {
 
         <div className="App">
           <header className="App-header">
-
+            <img src={logo} alt="Stockbird Logo"/>
           </header>
             <body>
-            <h1>Stock Selector!</h1>
             <form>
-                <label>Symbol:</label>
+                <label><Typography variant="body1">Search stocks:</Typography></label>
                 <input type="text" id="symbol"></input>
-                <button type="button" onClick= {callAPI("META")}>CALCULATE</button>
+                <Button variant="contained" onClick= {callAPI("META")}>OK</Button>
             </form>
             </body>
         </div>
