@@ -13,3 +13,19 @@ Parser 2 (parser_two):  id                      (-),
                         url                     (-),
                          -                      (retweets),
                          -                      (user_followers)
+
+Parser 5 (parser_five): user_name               (user_name),
+                        user_location           (-),
+                        user_description        (-),
+                        user_created            (-),
+                        user_followers          (user_followers),
+                        user_friends            (-),
+                        user_favourites         (-),
+                        user_verified           (user_verified),
+                        date                    (timestamp),
+                        text                    (text),
+                        hashtags                (-),
+                        source                  (-),
+                        is_retweet              (-),
+                         -                      (retweets)
+
