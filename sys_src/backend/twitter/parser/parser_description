@@ -1,7 +1,22 @@
 Diese Datei beschreibt, welches Format die einzelnen Parser verarbeiten können. Hierbei werden im folgenden die Parser
 numerisch durchnummeriert und die jeweiligen grund Formate, sowie die verwendeten Spalten angegeben.
 
-Parser 1 (parse_one):
+Parser 1 (parser_one):  id                      (-),
+                        user_name               (user_name),
+                        user_location           (-),
+                        user_description        (-),
+                        user_created            (-),
+                        user_followers          (user_followers),
+                        user_friends            (-),
+                        user_favourites         (-),
+                        user_verified           (user_verified),
+                        date                    (timestamp),
+                        text                    (text),
+                        hashtags                (-),
+                        source                  (-),
+                        retweets                (retweets),
+                        favorites               (-),
+                        is_retweet              (-)
 
 Parser 2 (parser_two):  id                      (-),
                         text                    (text),
@@ -13,6 +28,30 @@ Parser 2 (parser_two):  id                      (-),
                         url                     (-),
                          -                      (retweets),
                          -                      (user_followers)
+
+Parser 3 (parser_three):  id                      (-),
+                          link                    (-),
+                          content                 (text),
+                          date                    (timestamp),
+                          retweets                (retweets),
+                          favorites               (-),
+                          mentions                (-),
+                          hashtags                (-),
+                          arg.user_verified       (user_verified),
+                          arg.user_name           (user_name),
+                           -                      (user_followers)
+
+Parser 4 (parser_four):  id                      (-),
+                         timestamp               (timestamp),
+                         url                     (-),
+                         tweet                   (text),
+                         replies                 (-),
+                         retweets                (retweets),
+                         quotes                  (-),
+                         likes                   (-),
+                         arg.user_name           (user_name),
+                         arg.user_verified       (user_verified),
+                         arg.user_name           (user_followers)
 
 Parser 5 (parser_five): user_name               (user_name),
                         user_location           (-),
