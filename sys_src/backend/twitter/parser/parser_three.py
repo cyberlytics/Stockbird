@@ -26,8 +26,7 @@ def _format_data(data, user_name: str, user_follower: int, user_verified: bool):
 def main():
     """Dieser Parser kann über die Konsole gestartet werden und benötigt den Pfad des zu parsenden csv-Datei.
        Die Argumente für user-name, user-verified und user-follower sind hingegen optional, falls diese nicht angegeben
-       werden, dann wird ein default-value gesetzt.
-       Befehl für die Kommandozeile: ''"""
+       werden, dann wird ein default-value gesetzt."""
     parser = argparse.ArgumentParser(description='Parse csv-file with tweets and add it to tweets.csv.')
     parser.add_argument('-i', '--input-path', type=str,
                         help="path to the directory with data",

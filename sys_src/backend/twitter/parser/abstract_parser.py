@@ -56,9 +56,7 @@ def import_data(input_path: Path, use_cols: list, drop_cols: list, rename_cols: 
     else:
         raise ValueError("Input must be .csv or .json!")
 
-    return _format_data(data, rename_cols=rename_cols)[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value,
-                                                        TweetColumns.TIMESTAMP.value, TweetColumns.TEXT.value,
-                                                        TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]]
+    return _format_data(data, rename_cols=rename_cols)
 
 
 def _format_data(data, rename_cols: {}):
@@ -71,4 +69,6 @@ def _format_data(data, rename_cols: {}):
 
 def save(data, header: bool):
     """Diese Methode fügt den übergebenen Dataframe zur Datei tweets.csv hinzu."""
-    data.to_csv(DEST_PATH / TWEETS_FILENAME, mode='a', header=header, index=False)
+    data[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value, TweetColumns.TIMESTAMP.value,
+          TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]]\
+        .to_csv(DEST_PATH / TWEETS_FILENAME, mode='a', header=header, index=False)

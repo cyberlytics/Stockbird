@@ -10,7 +10,7 @@ def _import_data(input_path: Path, user_name: str, user_follower: int, user_veri
     data = ap.import_data(input_path=input_path,
                           use_cols=[TweetColumns.TIMESTAMP.value, 'tweet', TweetColumns.RETWEETS.value],
                           drop_cols=['id', 'url', 'replies', 'retweets', 'quotes', 'likes'],
-                          rename_cols={'date': TweetColumns.TIMESTAMP.value, 'content': TweetColumns.TEXT.value})
+                          rename_cols={'date': TweetColumns.TIMESTAMP.value, 'tweet': TweetColumns.TEXT.value})
 
     ap.save(_format_data(data=data, user_name=user_name, user_follower=user_follower, user_verified=user_verified),
             header=True if input_path.is_file() else False)
@@ -26,8 +26,7 @@ def _format_data(data, user_name: str, user_follower: int, user_verified: bool):
 def main():
     """Dieser Parser kann über die Konsole gestartet werden und benötigt den Pfad des zu parsenden csv-Datei.
        Die Argumente für user-name, user-verified und user-follower sind hingegen optional, falls diese nicht angegeben
-       werden, dann wird ein default-value gesetzt.
-       Befehl für die Kommandozeile: ''"""
+       werden, dann wird ein default-value gesetzt."""
     parser = argparse.ArgumentParser(description='Parse csv-file with tweets and add it to tweets.csv.')
     parser.add_argument('-i', '--input-path', type=str,
                         help="path to the directory with data",
