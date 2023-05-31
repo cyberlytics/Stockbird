@@ -5,7 +5,6 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+    //StrictMode entfernt ansonsten gibt es Probleme beim rendern (Rendert alles doppelt)
     <App />
-  </React.StrictMode>
 );

@@ -1,33 +1,17 @@
 import './App.css';
 import Home from './pages/Home';
-import Impressum from './pages/Impressum';
-import InfluencePresentation from './pages/InfluencePresentation';
 import StockPresentation from './pages/StockPresentation';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
-    let page
-    switch (window.location.pathname) {
-      case "/":
-        page = <Home />
-        break
-      case "/impressum":
-        page = <Impressum />
-        break
-      case "/influence-presentation":
-        page = <InfluencePresentation />
-        break
-      case "/stock-presentation":
-        page = <StockPresentation />
-        break
-      default:
-        page = <Home />
-    }
-
     return (
-      <>
-        {page}
-      </>
-    )
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/stockpresentation" element={<StockPresentation/>} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
