@@ -13,6 +13,6 @@ class TweetColumns(Enum):
 
 TWEETS_FILENAME = 'tweets.csv'
 
-SRC_PATH = Path(__file__).absolute().parent.parent
-BACKEND_PATH = Path(__file__).absolute().parent
+SRC_PATH = Path(__file__).absolute().parent
+BACKEND_PATH = Path(__file__).absolute().parent.parent
 DEST_PATH = BACKEND_PATH / 'res'

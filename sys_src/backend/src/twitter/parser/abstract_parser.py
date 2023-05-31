@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from sys_src.backend.Constants import TweetColumns, DEST_PATH, TWEETS_FILENAME
+from sys_src.backend.src.Constants import TweetColumns, DEST_PATH, TWEETS_FILENAME
 
 
 class AbstractParser(ABC):

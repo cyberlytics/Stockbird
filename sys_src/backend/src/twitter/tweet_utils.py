@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from sys_src.backend.Constants import TweetColumns, DEST_PATH, TWEETS_FILENAME
+from sys_src.backend.src.Constants import TweetColumns, DEST_PATH, TWEETS_FILENAME
 
 
 def query_tweets_by_substring(tweets_file_path: Path, sub_string: str):

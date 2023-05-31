@@ -3,7 +3,7 @@ import argparse
 import abstract_parser as ap
 
 from pathlib import Path
-from sys_src.backend.Constants import TweetColumns
+from sys_src.backend.src.Constants import TweetColumns
 
 
 def _import_data(input_path: Path, user_name: str, user_follower: int, user_verified: bool):
