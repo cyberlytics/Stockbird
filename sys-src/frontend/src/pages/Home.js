@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import logo from '../assets/Stockbird-Logo.png';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import StockPresentation from "./StockPresentation";
 import {useNavigate} from "react-router-dom";
 
 export default function Home() {
@@ -12,7 +11,6 @@ export default function Home() {
     const callAPI = (symbol) => {
         // instantiate a headers object
         var myHeaders = new Headers();
-        var parsedResult;
         // add content type header to object
         myHeaders.append("Content-Type", "application/json");
         // using built-in JSON utility package turn object to string and store in a variable
@@ -29,8 +27,11 @@ export default function Home() {
         fetch("https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev", requestOptions)
             .then(response => response.text())
             .then(result => {
-                parsedResult = JSON.parse(result).body;
-                navigate('/stockpresentation', {state: parsedResult});
+                const parsedResult = JSON.parse(result).body;
+                //Hier nochmal parsen ansonsten gibt es Probleme mit StockPresentation
+                const parsedResult2 = JSON.parse(parsedResult)
+                //Variable wird hier übergeben und nicht in dem anderen Component in ein JSON-Object umgewandelt
+                navigate('/stockpresentation', {state: parsedResult2});
             })
             .catch(error => console.log('error', error));
     }
