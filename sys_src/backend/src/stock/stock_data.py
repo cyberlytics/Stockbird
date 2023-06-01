@@ -8,17 +8,18 @@ from datetime import timedelta
 # Checks if data is available otherwise the data gets downloaded and saved
 def get_data(stock_symbol, path):
     # check if data is updated
-    if is_data_updated(path):
+    # nachbesprechen
+    """if _is_data_updated(path):
         return
 
     else:
-        # get data and save in a dataframe
-        ticker = yfinance.Ticker(stock_symbol)
-        data = ticker.history(period='max', interval='1d')
-        pd.DataFrame(data).to_json(path)
+        get data and save in a dataframe"""
+    ticker = yfinance.Ticker(stock_symbol)
+    data = ticker.history(period='max', interval='1d')
+    df = pd.DataFrame(data).to_json(path)
+    return df
 
-
-def is_data_updated(path):
+def _is_data_updated(path):
     try:
         df = pd.read_json(path)
         df.index = df.index.strftime('%Y-%m-%d')
