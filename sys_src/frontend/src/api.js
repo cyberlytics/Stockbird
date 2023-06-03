@@ -1,5 +1,4 @@
-
-    var callAPI = (symbol)=>{
+var callAPI = (symbol)=>{
         // instantiate a headers object
         var myHeaders = new Headers();
         // add content type header to object
