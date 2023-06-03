@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {useNavigate} from "react-router-dom";
 import logo from '../assets/Stockbird-Logo.png';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {useNavigate} from "react-router-dom";
 
 export default function Home() {
 
     const navigate = useNavigate();
 
-    const callAPI = (symbol) => {
+    const callAPI = (control, symbol) => {
+
         // instantiate a headers object
         var myHeaders = new Headers();
         // add content type header to object
         myHeaders.append("Content-Type", "application/json");
         // using built-in JSON utility package turn object to string and store in a variable
-        var raw = JSON.stringify({ "symbol": symbol });
+        var raw = JSON.stringify({ "control": control, "symbol": symbol });
         // create a JSON object with parameters for API call and store in a variable
         var requestOptions = {
             method: 'POST',
@@ -22,19 +23,23 @@ export default function Home() {
             body: raw,
             redirect: 'follow'
         };
-
+    
         // make API call with parameters and use promises to get response
         fetch("https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev", requestOptions)
             .then(response => response.text())
             .then(result => {
+                try {
                 const parsedResult = JSON.parse(result).body;
-                //Hier nochmal parsen ansonsten gibt es Probleme mit StockPresentation
-                const parsedResult2 = JSON.parse(parsedResult)
-                //Variable wird hier übergeben und nicht in dem anderen Component in ein JSON-Object umgewandelt
-                navigate('/stockpresentation', {state: parsedResult2});
+                    if (control==="_get_stock_data") {
+                        navigate('/stock-presentation', {state: parsedResult});
+                    }
+                } catch (error) {
+                console.log('Error parsing JSON:', error);
+                }
             })
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('Error fetching data:', error));
     }
+
     return (
         <>
             <div className="App">
@@ -49,7 +54,7 @@ export default function Home() {
                 <div className="Centered-div" id="Colored-search">
                     <form className="Stock-search">
                         <input id="symbol" type="text" placeholder="Search stocks by symbol (e. g. META)" />
-                        <Button variant="contained" onClick={() => callAPI("META")}>OK</Button>
+                        <Button variant="contained" onClick={() => callAPI("_get_stock_data", "META")}>OK</Button>
                     </form>
                 </div>
                 <footer className="footer">

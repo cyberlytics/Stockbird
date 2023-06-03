@@ -15,7 +15,7 @@ export default function StockPresentation() {
         if (jsonData) {
             drawChart();
         }
-    }, [jsonData]);
+    });
 
     const drawChart = () => {
         //Die Zeitangaben in der JSON-Datei ist vom typ UNIX, wird entsprechend umgewandelt mit dieser Methode
