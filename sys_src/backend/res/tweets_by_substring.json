@@ -1,0 +1,132 @@
+{
+    "columns":[
+        "user_name",
+        "user_followers",
+        "timestamp",
+        "text",
+        "retweets",
+        "user_verified"
+    ],
+    "data":[
+        [
+            "Elon Musk",
+            "101308933",
+            "2022-07-06 18:02:11+00:00",
+            "@mishaboar @boringcompany Supporting Doge wherever possible",
+            "2081",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "103024197",
+            "2022-08-01 17:48:26+00:00",
+            "X \u2764\ufe0f Doges",
+            "3507",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "106593599",
+            "2022-09-13 23:04:03+00:00",
+            "But u have to pay in Doge",
+            "3286",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "109262799",
+            "2022-10-11 23:08:46+00:00",
+            "And you can pay with Doge!",
+            "2765",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "109943741",
+            "2022-10-17 05:52:27+00:00",
+            "@DogecoinNorway @moxie @ID_AA_Carmack \ud83e\udd23 that\u2019s happened to me many times",
+            "68",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "119716837",
+            "2022-11-23 20:18:44+00:00",
+            "@DogePotamus @dogehodl2021 @StephenKing This is awesome",
+            "362",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "127877521",
+            "2023-01-25 17:59:32+00:00",
+            "@dogeofficialceo Thank you, Sir Doge!",
+            "633",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "129521233",
+            "2023-02-13 04:20:39+00:00",
+            "@GRDecter Dogecoin",
+            "8121",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "130455727",
+            "2023-02-22 09:40:41+00:00",
+            "High time I confessed I let the Doge out https:\/\/t.co\/TAi4p1khAd\u2026 https:\/\/t.co\/8cKTwIikuB",
+            "17299",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "133258542",
+            "2023-03-23 09:20:04+00:00",
+            "@cb_doge Ok, but it will cost 3 Doge",
+            "2704",
+            "True"
+        ],
+        [
+            "Elon Musk",
+            "135622439",
+            "2023-04-10 03:44:30+00:00",
+            "@iamharaldur What does a dyslexic, agnostic amnesiac who believes in crypto do?\r\n\r\nLies up all night thinking about Doge.",
+            "1506",
+            "False"
+        ],
+        [
+            "Elon Musk",
+            "136100670",
+            "2023-04-12 22:02:19+00:00",
+            "@cb_doge @dvorahfr I will pay a million Dogecoin for proof of this mine\u2019s existence!",
+            "4484",
+            "False"
+        ],
+        [
+            "Elon Musk",
+            "137839309",
+            "2023-04-23 13:44:45+00:00",
+            "@DogecoinNorway Or, at least, that\u2019s what Snorri said \r\nhttps:\/\/t.co\/P1N6FNqyNg",
+            "223",
+            "False"
+        ],
+        [
+            "Elon Musk",
+            "139541679",
+            "2023-05-04 18:04:34+00:00",
+            "@cb_doge Thanks for the 3 Doge!",
+            "874",
+            "False"
+        ],
+        [
+            "Elon Musk",
+            "140866887",
+            "2023-05-24 04:16:51+00:00",
+            "@EPavlic @Tesla_Optimus @Tesla @TeslaAIBot @teslaownersSV @TeslaOwnersEBay @MyDogeCTO @MyDogeCEO @Kristennetten\u2026 https:\/\/t.co\/zDEesf9h40",
+            "117",
+            "False"
+        ]
+    ]
+}

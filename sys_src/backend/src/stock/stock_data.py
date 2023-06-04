@@ -1,27 +1,28 @@
 import yfinance
 import pandas as pd
-
+import s3_access as s3
 from datetime import date
 from datetime import timedelta
 
 
 # Checks if data is available otherwise the data gets downloaded and saved
-def get_data(stock_symbol, path):
+def get_data(stock_symbol, file_name):
     # check if data is updated
-    # nachbesprechen
-    """if _is_data_updated(path):
-        return
-
+    if _is_data_updated(file_name):
+        json_data = s3.read_json(file_name)
+        return json_data
     else:
-        get data and save in a dataframe"""
-    ticker = yfinance.Ticker(stock_symbol)
-    data = ticker.history(period='max', interval='1d')
-    df = pd.DataFrame(data).to_json(path)
-    return df
+        #get data and save in a dataframe
+        ticker = yfinance.Ticker(stock_symbol)
+        data = ticker.history(period='max', interval='1d')
+        df_json = pd.DataFrame(data).to_json()
+        s3.write_json(df_json, file_name)
+        return df_json
 
-def _is_data_updated(path):
+def _is_data_updated(file_name):
     try:
-        df = pd.read_json(path)
+        json_data = s3.read_json(file_name)
+        df = pd.DataFrame(json_data)
         df.index = df.index.strftime('%Y-%m-%d')
 
         today = date.today()
@@ -35,7 +36,7 @@ def _is_data_updated(path):
         # yfinance only downloads data from yesterday
         return df.index[-1] == str(most_recent_day)
 
-    except FileNotFoundError:
+    except:
         return False
 
 
