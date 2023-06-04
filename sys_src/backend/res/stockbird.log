@@ -1,0 +1,16 @@
+2023-06-03 16:45:20,502 — stockbird — INFO — removed following columns ['id', 'url', 'company_names', 'symbols'], [ abstract_parser.py._remove_unused_columns() ]
+2023-06-03 16:45:20,505 — stockbird — INFO — renamed following columns {'verified': 'user_verified', 'source': 'user_name'}, [ abstract_parser.py.     _rename_columns() ]
+2023-06-03 16:45:20,506 — stockbird — INFO — added missing columns ['retweets', 'user_followers'], [ abstract_parser.py._add_missing_columns() ]
+2023-06-03 16:45:20,690 — stockbird — INFO — changed timestamp format to default datetime format, [ abstract_parser.py._change_timestamp_format() ]
+2023-06-03 16:45:20,713 — stockbird — INFO — changed column order from [ Index(['user_name', 'user_followers', 'timestamp', 'text', 'retweets',
+       'user_verified'],
+      dtype='object') to ['user_name', 'user_followers', 'timestamp', 'text', 'retweets', 'user_verified'] ], [ abstract_parser.py._change_column_order() ]
+2023-06-03 16:45:21,014 — stockbird — INFO — added tweets to file: C:\Users\michi\PycharmProjects\bcn-2023ss-teamcyan-stockbird\sys_src\backend\res\tweets.csv, [ abstract_parser.py.      append_to_file() ]
+2023-06-03 16:46:55,186 — stockbird — INFO — removed following columns ['user_location', 'user_description', 'user_created', 'user_friends', 'user_favourites', 'hashtags', 'source', 'is_retweet'], [ abstract_parser.py._remove_unused_columns() ]
+2023-06-03 16:46:55,188 — stockbird — INFO — renamed following columns {'date': 'timestamp'}, [ abstract_parser.py.     _rename_columns() ]
+2023-06-03 16:46:55,189 — stockbird — INFO — added missing columns ['retweets'], [ abstract_parser.py._add_missing_columns() ]
+2023-06-03 16:46:55,301 — stockbird — INFO — changed timestamp format to default datetime format, [ abstract_parser.py._change_timestamp_format() ]
+2023-06-03 16:46:55,338 — stockbird — INFO — changed column order from [ Index(['user_name', 'user_followers', 'timestamp', 'text', 'retweets',
+       'user_verified'],
+      dtype='object') to ['user_name', 'user_followers', 'timestamp', 'text', 'retweets', 'user_verified'] ], [ abstract_parser.py._change_column_order() ]
+2023-06-03 16:46:56,507 — stockbird — INFO — added tweets to file: C:\Users\michi\PycharmProjects\bcn-2023ss-teamcyan-stockbird\sys_src\backend\res\tweets.csv, [ abstract_parser.py.      append_to_file() ]
