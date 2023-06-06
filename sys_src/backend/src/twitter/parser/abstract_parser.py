@@ -2,7 +2,7 @@ from abc import ABC
 import numpy as np
 import pandas as pd
 
-import sys_src.backend.StockbirdLogger as StockbirdLogger
+import sys_src.backend.src.StockbirdLogger as StockbirdLogger
 from sys_src.backend.Constants import *
 
 logger = StockbirdLogger.get_logger(LOGGER_NAME)
