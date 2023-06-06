@@ -22,9 +22,9 @@ class TestStockData(unittest.TestCase):
         stock_symbol = "MSF.DE"
         path = "../data/" + stock_symbol + ".json"
 
-        self.assertTrue(stock_data.is_data_updated(path))
+        self.assertTrue(stock_data._is_data_updated(path))
 
         stock_symbol = "APPL"
         path = "../data/" + stock_symbol + ".json"
 
-        self.assertFalse(stock_data.is_data_updated(path))
+        self.assertFalse(stock_data._is_data_updated(path))

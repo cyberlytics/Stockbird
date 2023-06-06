@@ -1,4 +1,4 @@
-from pathlib import Path
+import backend.src.s3_access as s3
 import pandas as pd
 import datetime
 import os
@@ -8,9 +8,9 @@ from sys_src.backend.Constants import *
 logger = StockbirdLogger.get_logger(LOGGER_NAME)
 
 
-def query_tweets_by_stockname(tweets_file_path: Path, stock_name: str):
+def query_tweets_by_stockname(tweets_file_name: str, stock_name: str):
     """try to find every tweet containing the stockname in its text"""
-    df = get_tweets_from_csv(tweets_file_path)
+    df = get_tweets_from_csv(s3.read_csv(tweets_file_name))
     df = _query_tweets_by_substring(df, stock_name, TweetColumns.TEXT)
     create_json(df, DEST_PATH / 'tweets_by_stockname.json')
 
@@ -35,9 +35,6 @@ def _query_tweets_by_date(df: pd.DataFrame, date_from: datetime = None, date_to:
     elif not date_to:
         logger.info(f'filter tweets from {date_from} until end')
         return df[df[TweetColumns.TIMESTAMP] > date_from]
-
-    logger.info(f'filter tweets from {date_from} until {date_to}')
-    return df[(df[TweetColumns.TIMESTAMP] > '2013-01-01') & (df[TweetColumns.TIMESTAMP] < '2013-02-01')]
 
 
 def try_remove_file(dest_file: Path):
