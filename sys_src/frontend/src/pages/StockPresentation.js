@@ -18,11 +18,15 @@ export default function StockPresentation() {
     });
 
     const drawChart = () => {
+        console.log(jsonData);
+        console.log(jsonData["Close"]);
+
+        const jsonDataClose = jsonData.Close;
         //Die Zeitangaben in der JSON-Datei ist vom typ UNIX, wird entsprechend umgewandelt mit dieser Methode
-        const data = Object.entries(jsonData.Close).map(([timestamp, value]) => ({
+        const data = Object.entries(jsonDataClose).map(([timestamp, value]) => ({
             timestamp: parseInt(timestamp),
             value: parseFloat(value),
-        }));
+          })).filter(dataPoint => !isNaN(dataPoint.value));
 
         //Styling festlegen
         const margin = { top: 70, right: 30, bottom: 30, left: 40 };
