@@ -11,14 +11,17 @@ s3 = boto3.client('s3',
                   aws_access_key_id=access_key_id,
                   aws_secret_access_key=access_key)
 
+
 def read_json(file_name):
     response = s3.get_object(Bucket=bucket, Key=file_name)
     json_data = json.loads(response['Body'].read().decode('utf-8'))
     return json_data
 
+
 def write_json(json_data, file_name):
     json_str = json.dumps(json_data)
     s3.put_object(Body=json_str, Bucket=bucket, Key=file_name)
+
 
 def update_json(file_name, updated_data):
     data = read_json(file_name)
@@ -46,6 +49,7 @@ update_json(file_key, update_data)
 updated_data = read_json(file_key)
 print('Updated JSON data:', updated_data)
 """
+
 
 # Read CSV data from a file in S3
 def read_csv(file_name):

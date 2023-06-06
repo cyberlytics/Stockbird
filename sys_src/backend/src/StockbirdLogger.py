@@ -1,7 +1,7 @@
 import sys
-import logging
+
 from logging.handlers import TimedRotatingFileHandler
-from sys_src.backend.Constants import LOG_FILENAME, LOGFILE_PATH, LOGGER_FORMATTER
+from sys_src.backend.src.Constants import *
 
 
 def get_console_handler():
