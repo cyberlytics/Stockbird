@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "stock_symbol": "S&P 500",
+      "stock_name": "^GSPC",
+      "stock_strings": ["bullish", "diversified", "recovery", "indices", "investors", "financial", "performance", "volatility", "growth", "economy"]
+    },
+    {
+      "stock_symbol": "Macy's, Inc.",
+      "stock_name": "M",
+      "stock_strings": ["retail", "shopping", "fashion", "sales", "brands", "department", "customers", "revenue", "ecommerce", "trends"]
+    },
+    {
+      "stock_symbol": "NASDAQ Composite",
+      "stock_name": "^IXIC",
+      "stock_strings": ["technology", "innovation", "shares", "companies", "investments", "trading", "digital", "equities", "growth", "tech"]
+    },
+    {
+      "stock_symbol": "Dogecoin USD",
+      "stock_name": "DOGE-USD",
+      "stock_strings": ["cryptocurrency", "meme", "digital", "crypto", "investment", "blockchain", "community", "memecoin", "cryptoworld", "hodl"]
+    },
+    {
+      "stock_symbol": "Tesla, Inc.",
+      "stock_name": "TSLA",
+      "stock_strings": ["electric", "vehicles", "innovation", "sustainability", "EVs", "autopilot", "energy", "production", "technology", "renewable"]
+    },
+    {
+      "stock_symbol": "Bitcoin USD",
+      "stock_name": "BTC-USD",
+      "stock_strings": ["cryptocurrency", "blockchain", "decentralized", "digital", "investments", "crypto", "trading", "financial", "BTC", "cryptoexchange"]
+    },
+    {
+      "stock_symbol": "Apple Inc.",
+      "stock_name": "AAPL",
+      "stock_strings": ["technology", "iPhone", "Mac", "innovation", "products", "services", "ecosystem", "earnings", "consumer", "brand"]
+    },
+    {
+      "stock_symbol": "Microsoft Corporation",
+      "stock_name": "MSFT",
+      "stock_strings": ["software", "cloud", "productivity", "Windows", "technology", "enterprise", "revenue", "services", "digital", "growth"]
+    },
+    {
+      "stock_symbol": "Ford Motor Company",
+      "stock_name": "F",
+      "stock_strings": ["automotive", "vehicles", "manufacturing", "electric", "sustainability", "innovation", "production", "trucks", "mobility", "fleet"]
+    },
+    {
+      "stock_symbol": "Silver Jul 23",
+      "stock_name": "SI=F",
+      "stock_strings": ["precious", "metal", "commodity", "investment", "silver", "trading", "price", "hedge", "safehaven", "market"]
+    },
+    {
+      "stock_symbol": "Gold Aug 23",
+      "stock_name": "GC=F",
+      "stock_strings": ["precious", "metal", "commodity", "investment", "gold", "trading", "price", "hedge", "safehaven", "market"]
+    }
+  ]
+}
+
+
+
