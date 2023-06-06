@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from source import stock_data
+from sys_src.backend.src.stock import stock_data
 
 
 class TestStockData(unittest.TestCase):
