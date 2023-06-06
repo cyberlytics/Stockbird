@@ -54,3 +54,9 @@
 #splogo {
     width: 20%;
 }
+
+.tweetData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

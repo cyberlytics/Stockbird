@@ -1,38 +1,41 @@
 import '../App.css';
 import logo from '../assets/Stockbird-Logo.png';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function StockPresentation() {
-
     const location = useLocation();
     const jsonDataString = location.state;
     const jsonData = JSON.parse(jsonDataString);
 
+    const [tweetData, setTweetData] = useState('');
+
     const chartRef = useRef(null);
+
+
+    const [data, setData] = useState('');
+    //let data = [];
 
     useEffect(() => {
         //Wenn die Daten verfügbar sind dann zeichne den Graphen
         if (jsonData) {
             drawChart();
         }
-    });
+    }, []); // Pass `jsonData` as a dependency to the useEffect hook
 
     const drawChart = () => {
-        console.log(jsonData);
-        console.log(jsonData["Close"]);
 
         const jsonDataClose = jsonData.Close;
-        //Die Zeitangaben in der JSON-Datei ist vom typ UNIX, wird entsprechend umgewandelt mit dieser Methode
+        // Die Zeitangaben in der JSON-Datei sind vom Typ UNIX und werden entsprechend umgewandelt
         const data = Object.entries(jsonDataClose).map(([timestamp, value]) => ({
             timestamp: parseInt(timestamp),
             value: parseFloat(value),
-          })).filter(dataPoint => !isNaN(dataPoint.value));
+        })).filter(dataPoint => !isNaN(dataPoint.value));
 
-        //Styling festlegen
+        // Styling festlegen
         const margin = { top: 70, right: 30, bottom: 30, left: 40 };
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
@@ -75,35 +78,66 @@ export default function StockPresentation() {
             .attr('d', line);
     };
 
-    //const [value, setValue] = useState([null, null]);
+    const callAPI = async (control, substring) => {
+        // instantiate a headers object
+        var myHeaders = new Headers();
+        // add content type header to object
+        myHeaders.append('Content-Type', 'application/json');
+        // using built-in JSON utility package turn object to string and store in a variable
+        var raw = JSON.stringify({ control: control, substring: substring });
+        // create a JSON object with parameters for API call and store in a variable
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+
+        // make API call with parameters and use promises to get response
+        fetch('https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev', requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                try {
+                    const parsedResult = JSON.parse(result).body;
+                    const parsedResult2 = JSON.parse(parsedResult);
+                    if (control === '_query_tweets_by_substring') {
+                        setTweetData(parsedResult2);
+                        const jsonDataTweet = JSON.parse(tweetData);
+                        setData(jsonDataTweet.data)
+                        console.log(data);
+                    }
+                } catch (error) {
+                    console.log('Error parsing JSON:', error);
+                }
+            })
+            .catch(error => console.log('Error fetching data:', error));
+    };
 
     return (
         <>
-          <div className='stockPresentation'>
-            <img className="Centered-img" id='splogo' src={logo} alt="Stockbird Logo" />
-            <Typography variant="h3">
-              Name of Stock
-            </Typography>
-            <div ref={chartRef}></div>
-            {/*<Box width='500px'>
-              <DateRangePicker
-                startText='Analyse start'
-                endText='Analyse end'
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField {...startProps} />
-                    <Box sx={{ mx: 2 }}>-</Box>
-                    <TextField {...endProps} />
-                  </>
+            <div className="stockPresentation">
+                <img className="Centered-img" id="splogo" src={logo} alt="Stockbird Logo" />
+                <Typography variant="h3">Name of Stock</Typography>
+                <div ref={chartRef}></div>
+                <Button variant="contained" onClick={() => callAPI('_query_tweets_by_substring', 'META')}>
+                    Analyze
+                </Button>
+            </div>
+
+            <div className="tweetData">
+                {data && data.length > 0 && (
+                    <>
+                        {data.map((row, index) => (
+                            <div key={index}>
+                                <p>{row[0]}</p>
+                                <p>{row[2]}</p>
+                                <p>{row[3]}</p>
+                            </div>
+                        ))}
+                    </>
                 )}
-              />
-            </Box>*/}
-            <Button variant="contained">Start analyzing</Button>
-          </div>
+            </div>
+
         </>
-      );
+    );
 }
