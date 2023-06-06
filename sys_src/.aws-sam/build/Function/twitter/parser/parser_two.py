@@ -7,6 +7,7 @@ class ParserTwo(AbstractParser):
 
     def __init__(self, source_path: Path):
         super().__init__(source_path)
+
         self._remove_unused_columns(['id', 'url', 'company_names', 'symbols'])
         self._rename_columns({'verified': TweetColumns.USERVERIFIED.value,
                               'source': TweetColumns.USERNAME.value})

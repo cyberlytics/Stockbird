@@ -1,8 +1,6 @@
 import yfinance
 import pandas as pd
-
-import sys_src.backend.src.s3_access as s3
-
+import s3_access as s3
 from datetime import date
 from datetime import timedelta
 
