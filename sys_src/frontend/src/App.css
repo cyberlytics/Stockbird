@@ -36,6 +36,10 @@
     padding: 30px;
 }
 
+.stockPresentation {
+    margin: 50px;
+}
+
 #Colored-search {
     background-color: #dbccae;
     width: 30%;
@@ -45,4 +49,8 @@
     height: 30px;
     width: 100%;
     margin-right: 5px;
+}
+
+#splogo {
+    width: 20%;
 }

@@ -1,6 +1,10 @@
+import '../App.css';
+import logo from '../assets/Stockbird-Logo.png';
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useLocation } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 export default function StockPresentation() {
 
@@ -71,5 +75,35 @@ export default function StockPresentation() {
             .attr('d', line);
     };
 
-    return <div ref={chartRef}></div>;
+    //const [value, setValue] = useState([null, null]);
+
+    return (
+        <>
+          <div className='stockPresentation'>
+            <img className="Centered-img" id='splogo' src={logo} alt="Stockbird Logo" />
+            <Typography variant="h3">
+              Name of Stock
+            </Typography>
+            <div ref={chartRef}></div>
+            {/*<Box width='500px'>
+              <DateRangePicker
+                startText='Analyse start'
+                endText='Analyse end'
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(startProps, endProps) => (
+                  <>
+                    <TextField {...startProps} />
+                    <Box sx={{ mx: 2 }}>-</Box>
+                    <TextField {...endProps} />
+                  </>
+                )}
+              />
+            </Box>*/}
+            <Button variant="contained">Start analyzing</Button>
+          </div>
+        </>
+      );
 }
