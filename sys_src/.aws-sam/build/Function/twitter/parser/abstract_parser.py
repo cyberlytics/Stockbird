@@ -1,21 +1,19 @@
 from abc import ABC
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
-import sys_src.backend.src.StockbirdLogger as StockbirdLogger
-
-from sys_src.backend.src.Constants import *
-
-logger = StockbirdLogger.get_logger(LOGGER_NAME)
+from sys_src.backend.src.Constants import TweetColumns, DEST_PATH, TWEETS_FILENAME
 
 
 class AbstractParser(ABC):
 
     def __init__(self, source_path: Path):
-        self.source_path: Path = source_path
-        self.dest_path: Path = DEST_PATH / TWEETS_FILENAME
-        self.format_type: str = source_path.suffix
-        self.data: pd.DataFrame = self._import_data()
+        self.source_path = source_path
+        self.dest_path = DEST_PATH / TWEETS_FILENAME
+        self.format_type = source_path.suffix
+        self.data = self._import_data()
 
     def _import_data(self):
         if self.format_type == '.csv':
@@ -24,33 +22,26 @@ class AbstractParser(ABC):
             return pd.read_json(self.source_path, orient='split')
 
     def _remove_unused_columns(self, column_names: list):
-        logger.info(f'removed following columns {column_names}')
         for i in column_names:
             self.data.pop(i)
 
     def _rename_columns(self, column_names: dict):
         self.data.rename(columns=column_names, inplace=True)
-        logger.info(f'renamed following columns {column_names}')
 
     def _add_missing_columns(self, missing_columns: list):
         for i in missing_columns:
             self.data[i] = np.nan
-        logger.info(f'added missing columns {missing_columns}')
 
     def _change_timestamp_format(self, time_format: str = None):
         self.data[TweetColumns.TIMESTAMP.value] = \
             pd.to_datetime(self.data[TweetColumns.TIMESTAMP.value], format=time_format)
-        logger.info(f'changed timestamp format to default datetime format')
 
     def _change_column_order(self, column_list: list):
         self.data = self.data.loc[:, column_list]
-        logger.info(f'changed column order from [ {self.data.columns} to {column_list} ]')
 
     def append_to_file(self):
-        """add tweets to a given file if file does not exist it will be created"""
         self.data.to_csv(self.dest_path, mode='a', index=False,
                          header=False if self.dest_path.is_file() else True)
-        logger.info(f'added tweets to file: {self.dest_path}')
 
 
 def import_data(input_path: Path, use_cols: list, drop_cols: list, rename_cols: {}):
@@ -79,5 +70,5 @@ def _format_data(data, rename_cols: {}):
 def save(data, header: bool):
     """Diese Methode fügt den übergebenen Dataframe zur Datei tweets.csv hinzu."""
     data[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value, TweetColumns.TIMESTAMP.value,
-          TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]] \
+          TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]]\
         .to_csv(DEST_PATH / TWEETS_FILENAME, mode='a', header=header, index=False)
