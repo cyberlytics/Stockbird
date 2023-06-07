@@ -1,11 +1,26 @@
 import '../App.css';
-import logo from '../assets/Stockbird-Logo.png';
+import logo from '../assets/Stockbird-Logo2.png';
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { callAPITweets } from './api'; // Import the callAPI function
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary
+}));
 
 export default function StockPresentation() {
 
@@ -125,13 +140,49 @@ export default function StockPresentation() {
 
     return (
         <>
-            <div className="stockPresentation">
-                <img className="Centered-img" id="splogo" src={logo} alt="Stockbird Logo" />
-                <Typography variant="h3">{symbol}</Typography>
-                <div ref={chartRef}></div>
-                <Button variant="contained" onClick={handleAnalyzeClick}>
-                    Analyze
-                </Button>
+            <div>
+              <div className="spHeader">
+                <Link to="/">
+                  <img id="splogo" src={logo} alt="Stockbird Logo" />
+                </Link>
+              </div>
+              <div className='stockPresentation'>
+                <Stack
+                    direction="row"
+                    divider={<Divider orientation="vertical" flexItem />}
+                    spacing={2}
+                  >
+                    <div>
+                      <Typography variant="h3">{symbol}</Typography>
+                      <div ref={chartRef}></div>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateRangePicker className="datePicker" localeText={{ start: 'Twitter analysis start', end: 'Twitter analysis end' }} />
+                      </LocalizationProvider>
+                      <Button id="analyzeBtn" variant="contained" onClick={handleAnalyzeClick}>
+                        Analyze
+                      </Button>
+                    </div>
+                    <div>
+                      <Stack spacing={2}>
+                        <Item> 
+                          <Typography variant='body2'>
+                            Tweet 1 Preview
+                          </Typography>
+                        </Item>
+                        <Item> 
+                          <Typography variant='body2'>
+                            Tweet 2 Preview
+                          </Typography>
+                        </Item>
+                        <Item> 
+                          <Typography variant='body2'>
+                            Tweet 3 Preview
+                          </Typography>
+                        </Item>
+                      </Stack>
+                    </div>
+                  </Stack>
+              </div>
             </div>
 
             <div className="tweetData">
