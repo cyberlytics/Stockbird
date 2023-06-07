@@ -8,16 +8,25 @@ import Typography from '@mui/material/Typography';
 
 export default function StockPresentation() {
     const location = useLocation();
-    const jsonDataString = location.state;
+    const { parsedResult2, symbol } = location.state;
+    const jsonDataString = parsedResult2;
     const jsonData = JSON.parse(jsonDataString);
 
     const [tweetData, setTweetData] = useState('');
 
     const chartRef = useRef(null);
 
+    const symbolMapping = {
+        TSLA: 'Tesla',
+        AAPL: 'Apple',
+        GOOG: 'Google',
+        'DOGE-USD': 'Dogecoin',
+        'BTC-USD': 'Bitcoin'
+    };
+
+    const secondParameter = symbolMapping[symbol];
 
     const [data, setData] = useState('');
-    //let data = [];
 
     useEffect(() => {
         //Wenn die Daten verfügbar sind dann zeichne den Graphen
@@ -117,9 +126,9 @@ export default function StockPresentation() {
         <>
             <div className="stockPresentation">
                 <img className="Centered-img" id="splogo" src={logo} alt="Stockbird Logo" />
-                <Typography variant="h3">Name of Stock</Typography>
+                <Typography variant="h3">{symbol}</Typography>
                 <div ref={chartRef}></div>
-                <Button variant="contained" onClick={() => callAPI('_query_tweets_by_substring', 'META')}>
+                <Button variant="contained" onClick={() => callAPI('_query_tweets_by_substring', secondParameter)}>
                     Analyze
                 </Button>
             </div>

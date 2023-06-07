@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {useNavigate} from "react-router-dom";
 import logo from '../assets/Stockbird-Logo.png';
 import Button from '@mui/material/Button';
@@ -8,8 +8,10 @@ export default function Home() {
 
     const navigate = useNavigate();
 
-    const callAPI = (control, symbol) => {
+    const symbolRef = useRef(null);
 
+    const callAPI = (control) => {
+        const symbol = symbolRef.current.value;
         // instantiate a headers object
         var myHeaders = new Headers();
         // add content type header to object
@@ -33,7 +35,7 @@ export default function Home() {
                     const parsedResult2 = JSON.parse(parsedResult);
                     if (control === "_get_stock_data") {
                         console.log(parsedResult2);
-                        navigate('/stock-presentation', { state: parsedResult2 });
+                        navigate('/stock-presentation', { state: { parsedResult2, symbol } });
                     }
                 } catch (error) {
                     console.log('Error parsing JSON:', error);
@@ -55,8 +57,8 @@ export default function Home() {
                 </header>
                 <div className="Centered-div" id="Colored-search">
                     <form className="Stock-search">
-                        <input id="symbol" type="text" placeholder="Search stocks by symbol (e. g. META)" />
-                        <Button variant="contained" onClick={() => callAPI("_get_stock_data", "META")}>OK</Button>
+                        <input id="symbol" ref={symbolRef} type="text" placeholder="Search stocks by symbol (e. g. META)" />
+                        <Button variant="contained" onClick={() => callAPI("_get_stock_data")}>OK</Button>
                     </form>
                 </div>
                 <footer className="footer">
