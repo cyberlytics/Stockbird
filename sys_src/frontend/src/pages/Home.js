@@ -29,12 +29,14 @@ export default function Home() {
             .then(response => response.text())
             .then(result => {
                 try {
-                const parsedResult = JSON.parse(result).body;
-                    if (control==="_get_stock_data") {
-                        navigate('/stock-presentation', {state: parsedResult});
+                    const parsedResult = JSON.parse(result).body;
+                    const parsedResult2 = JSON.parse(parsedResult);
+                    if (control === "_get_stock_data") {
+                        console.log(parsedResult2);
+                        navigate('/stock-presentation', { state: parsedResult2 });
                     }
                 } catch (error) {
-                console.log('Error parsing JSON:', error);
+                    console.log('Error parsing JSON:', error);
                 }
             })
             .catch(error => console.log('Error fetching data:', error));
