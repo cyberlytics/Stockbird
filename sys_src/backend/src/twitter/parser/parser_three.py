@@ -3,6 +3,8 @@ import argparse
 import abstract_parser as ap
 
 from pathlib import Path
+
+from sys_src.backend.src import stockbird_logger
 from sys_src.backend.src.Constants import TweetColumns
 
 
@@ -47,6 +49,7 @@ def main():
     args = parser.parse_args()
 
     _import_data(Path(args.input_path), args.user_name, args.user_followers, args.user_verified)
+    stockbird_logger.write_log()
 
 
 if __name__ == "__main__":

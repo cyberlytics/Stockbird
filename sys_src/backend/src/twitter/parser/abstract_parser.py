@@ -2,11 +2,11 @@ from abc import ABC
 import numpy as np
 import pandas as pd
 
-import sys_src.backend.src.StockbirdLogger as StockbirdLogger
+import sys_src.backend.src.stockbird_logger as stockbird_logger
 
 from sys_src.backend.src.Constants import *
 
-logger = StockbirdLogger.get_logger(LOGGER_NAME)
+logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 
 class AbstractParser(ABC):

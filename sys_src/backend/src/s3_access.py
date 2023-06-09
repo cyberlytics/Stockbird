@@ -1,26 +1,38 @@
 import json
 import boto3
 import pandas as pd
-
-access_key_id = 'AKIATKBDO35QY726HY7J'
-access_key = 'vJMAK2okWZrzv1umRgMGKqQ8FHs9NYyAjWDBhVdV'
-bucket = 'stockbird-res'
+from datetime import datetime
+from sys_src.backend.src.Constants import *
 
 
 s3 = boto3.client('s3',
-                  aws_access_key_id=access_key_id,
-                  aws_secret_access_key=access_key)
+                  aws_access_key_id=ACCESS_KEY_ID,
+                  aws_secret_access_key=ACCESS_KEY)
 
 
 def read_json(file_name):
-    response = s3.get_object(Bucket=bucket, Key=file_name)
+    response = s3.get_object(Bucket=BUCKET, Key=file_name)
     json_data = json.loads(response['Body'].read().decode('utf-8'))
     return json_data
 
 
 def write_json(json_data, file_name):
     json_str = json.dumps(json_data)
-    s3.put_object(Body=json_str, Bucket=bucket, Key=file_name)
+    s3.put_object(Body=json_str, Bucket=BUCKET, Key=file_name)
+
+
+def write_log(log_data, file_name):
+    s3.put_object(Body=log_data, Bucket=BUCKET, Key=file_name)
+
+
+def get_all_log_files():
+    files = [sub['Key'] for sub in s3.list_objects(Bucket=BUCKET)['Contents'] if '.log' in sub['Key']]
+    return sorted(files, key=lambda date: datetime.strptime(date, 'stockbird-%Y-%m-%d.log'))
+
+
+def remove_log_file():
+    if len(get_all_log_files()) >= 30 and datetime.today().strftime('%Y-%m-%d') not in get_all_log_files():
+        s3.delete_object(Bucket=BUCKET, Key=get_all_log_files()[0])
 
 
 def update_json(file_name, updated_data):
@@ -53,9 +65,10 @@ print('Updated JSON data:', updated_data)
 
 # Read CSV data from a file in S3
 def read_csv(file_name):
-    response = s3.get_object(Bucket=bucket, Key=file_name)
+    response = s3.get_object(Bucket=BUCKET, Key=file_name)
     csv_data = pd.read_csv(response['Body'])
     return csv_data
+
 
 """
 file_name = 'example.csv'
