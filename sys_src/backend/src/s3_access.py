@@ -77,3 +77,12 @@ retrieved_data = read_csv(file_key)
 print('Retrieved CSV data from S3:')
 print(retrieved_data)
 """
+
+
+def write_csv(data, file_name, header: bool):
+    # append data to an existed csv-file on the S3 bucket and save it.
+    current_data = pd.read_csv(s3.get_object(Bucket=BUCKET, Key=file_name)['Body'])
+    appended_data_encode = pd.concat([current_data, data], ignore_index=True)\
+        .to_csv(None, index=False, header=header)\
+        .encode('utf-8')
+    s3.put_object(Body=appended_data_encode, Bucket=BUCKET, Key=file_name)
