@@ -1,3 +1,5 @@
+import json
+
 import yfinance
 import pandas as pd
 
@@ -6,9 +8,11 @@ import sys_src.backend.src.s3_access as s3
 from datetime import date
 from datetime import timedelta
 
+import datetime
+
 
 # Checks if data is available otherwise the data gets downloaded and saved
-def get_data(stock_symbol, file_name):
+def get_data(stock_symbol: str, file_name: str):
     # check if data is updated
     if _is_data_updated(file_name):
         json_data = s3.read_json(file_name)
@@ -21,11 +25,14 @@ def get_data(stock_symbol, file_name):
         s3.write_json(df_json, file_name)
         return df_json
 
-def _is_data_updated(file_name):
+
+def _is_data_updated(file_name: str):
     try:
         json_data = s3.read_json(file_name)
+        json_data = json.loads(json_data)
+
         df = pd.DataFrame(json_data)
-        df.index = df.index.strftime('%Y-%m-%d')
+        df = _reindex_timestamps(df)
 
         today = date.today()
         # if today is a monday, the last available data from yfinance should be friday today - 3 days
@@ -35,11 +42,39 @@ def _is_data_updated(file_name):
         else:
             most_recent_day = today - timedelta(days=1)
 
-        # yfinance only downloads data from yesterday
-        return df.index[-1] == str(most_recent_day)
+        # yfinance only downloads data from one day ago
+        return df.index[-1] == most_recent_day
 
     except:
         return False
 
 
+def _reindex_timestamps(df: pd.DataFrame):
+    dt_index = []
+
+    for timestamp_ms in df.index:
+        timestamp_sec = int(timestamp_ms) / 1000  # Convert milliseconds to seconds
+
+        # Create a datetime object from the timestamp
+        dt = datetime.datetime.utcfromtimestamp(timestamp_sec).date()
+
+        # Print the datetime object
+        dt_index.append(dt)
+
+    df = df.set_index(pd.Index(dt_index))
+
+    return df
+
+
+def filter_by_date(to_filter: str, from_date: str, to_date: str):
+    dt_from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
+    dt_to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
+
+    json_data = json.loads(to_filter)
+    df = pd.DataFrame(json_data)
+    df = _reindex_timestamps(df)
+
+    filtered_df = df.loc[(df.index >= dt_from_date) & (df.index <= dt_to_date)]
+
+    return filtered_df
 
