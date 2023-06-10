@@ -1,7 +1,10 @@
+import atexit
 import json
 import stock.stock_data as stock_data
-import sys_src.backend.src.Constants as const
 import twitter.tweet_utils as tweet_utils
+from sys_src.backend.src import stockbird_logger
+from sys_src.backend.src.Constants import *
+
 # define the handler function that the Lambda service will use an entry point
 
 
@@ -24,8 +27,8 @@ def _filter_stock_by_date(event):
     }
 
 
-def _query_tweets_by_substring(event):
-    df_json = tweet_utils.query_tweets_by_substring(const.TWEETS_FILENAME, event['substring'])
+def _query_tweets_by_stock_name(event):
+    df_json = tweet_utils.query_tweets_by_stock_name(TWEETS_FILENAME, event['stock_name'])
     df_json_str = json.dumps(df_json)
     return {
         'statusCode': 200,
@@ -34,4 +37,5 @@ def _query_tweets_by_substring(event):
 
 
 def lambda_handler(event, context):
+    atexit.register(stockbird_logger.write_log())
     return globals()[event['control']](event)

@@ -30,6 +30,7 @@ def main():
     args = add_args()
     parser = ParserTwo(Path(args.input_path))
     parser.append_to_file()
+    stockbird_logger.write_log()
 
 
 if __name__ == "__main__":
