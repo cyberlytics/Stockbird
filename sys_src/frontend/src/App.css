@@ -48,7 +48,7 @@
 
 .datePicker {
     margin-top: 30px;
-    width: 30%;
+    width: 50%;
     float: left;
 }
 
@@ -57,9 +57,21 @@
     margin-bottom: 30px;
 }
 
-#Colored-search {
-    background-color: #dbccae;
-    width: 30%;
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    z-index: 999;
+  }
+  
+
+#stockSearchbar {
+    width: 25%;
 }
 
 #symbol {

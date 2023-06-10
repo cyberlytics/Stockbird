@@ -41,6 +41,7 @@ export default function StockPresentation() {
 
     //useRef allows the manipulation of the DOM, where we plot the stock if data is available
     const chartRef = useRef(null);
+    const tooltipRef = useRef(null);
 
     //here we map our symbols to the corresponding name of the Company which is necessary for receiving the right tweets
     const symbolMapping = {
@@ -113,13 +114,49 @@ export default function StockPresentation() {
             .x(d => xScale(d.timestamp))
             .y(d => yScale(d.value));
 
-        svg
+            svg
             .append('path')
             .datum(data)
             .attr('fill', 'none')
             .attr('stroke', 'steelblue')
             .attr('stroke-width', 1.5)
             .attr('d', line);
+      
+          const bisect = d3.bisector(d => d.timestamp).left;
+      
+          svg
+            .append('rect')
+            .attr('class', 'overlay')
+            .attr('width', width)
+            .attr('height', height)
+            .style('opacity', 0)
+            .on('mouseover', () => tooltipRef.current.style.display = 'block')
+            .on('mouseout', () => tooltipRef.current.style.display = 'none')
+            .on('mousemove', handleMouseMove);
+      
+          function handleMouseMove(event) {
+            const x0 = xScale.invert(d3.pointer(event)[0]);
+            const i = bisect(data, x0, 1);
+            const d0 = data[i - 1];
+            const d1 = data[i];
+            const d = x0 - d0.timestamp > d1.timestamp - x0 ? d1 : d0;
+      
+            const tooltip = d3.select(tooltipRef.current);
+            tooltip.select('.timestamp').text(formatDate(d.timestamp));
+            tooltip.select('.value').text(formatValue(d.value));
+            tooltip.style('left', `${event.pageX + 10}px`)
+              .style('top', `${event.pageY}px`);
+          }
+      
+          function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const formattedDateTime = date.toLocaleDateString(); 
+            return formattedDateTime;
+          }
+      
+          function formatValue(value) {
+            return value;
+          }
     };
 
     //this function gets triggered when the 'Analyze' button is clicked
@@ -183,6 +220,11 @@ export default function StockPresentation() {
                     </div>
                   </Stack>
               </div>
+            </div>
+
+            <div ref={tooltipRef} className="tooltip" style={{ display: 'none' }}>
+              <p className="timestamp"></p>
+              <p className="value"></p>
             </div>
 
             <div className="tweetData">
