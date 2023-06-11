@@ -55,6 +55,8 @@
 .spHeader {
     background-color: aliceblue;
     margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .tooltip {
@@ -67,8 +69,24 @@
     font-size: 14px;
     line-height: 1.5;
     z-index: 999;
-  }
-  
+}
+
+.logoSpace {
+    margin-left: 1%;
+}
+
+.impressumSpace {
+    margin-right: 1%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.impressumBody {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 50%;
+}  
 
 #stockSearchbar {
     width: 25%;
@@ -81,7 +99,7 @@
 }
 
 #splogo {
-    width: 10%;
+    width: 30%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -92,4 +110,12 @@
     overflow: hidden;
 }
 
+#projectBy, #collabWith {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#othlogo {
+    width: 10%;
+}
 

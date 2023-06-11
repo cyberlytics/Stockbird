@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 import logo from '../assets/Stockbird-Logo.png';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -65,9 +65,11 @@ export default function Home() {
                     <Typography variant='body2' align='center' gutterBottom>
                         © 2023 Stockbird.
                     </Typography>
-                    <Typography variant='subtitle2' align='center' color="textSecondary">
-                        Impressum
-                    </Typography>
+                    <Link to="/impressum">
+                        <Typography variant='subtitle2' align='center' color="textSecondary">
+                            Impressum
+                        </Typography>
+                    </Link>
                 </footer>
             </div>
         </>

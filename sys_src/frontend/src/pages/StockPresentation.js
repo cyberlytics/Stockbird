@@ -179,9 +179,16 @@ export default function StockPresentation() {
         <>
             <div>
               <div className="spHeader">
-                <Link to="/">
-                  <img id="splogo" src={logo} alt="Stockbird Logo" />
-                </Link>
+                <div className="logoSpace">
+                  <Link to="/">
+                    <img id="splogo" src={logo} alt="Stockbird Logo" />
+                  </Link>
+                </div>
+                <div className="impressumSpace">
+                  <Link to="/impressum" style={{ color: 'grey', textDecoration: 'none' }}>
+                    <Typography variant="body1">Impressum</Typography>
+                  </Link>
+                </div>
               </div>
               <div className='stockPresentation'>
                 <Stack
