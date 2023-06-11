@@ -45,9 +45,9 @@ export default function StockPresentation() {
 
     //here we map our symbols to the corresponding name of the Company which is necessary for receiving the right tweets
     const symbolMapping = {
-        TSLA: 'Tesla',
-        AAPL: 'Apple',
-        GOOG: 'Google',
+        'TSLA': 'Tesla',
+        'AAPL': 'Apple',
+        'GOOG': 'Google',
         'DOGE-USD': 'Dogecoin',
         'BTC-USD': 'Bitcoin'
     };
@@ -165,9 +165,9 @@ export default function StockPresentation() {
     const handleAnalyzeClick = async () => {
         try {
             const apiTweets = await callAPITweets('_query_tweets_by_substring', secondParameter);
+            const jsonDataTweet = JSON.parse(apiTweets);
             //here we set the tweetData value to the tweets we get back, but here are some information we don't need like
-            setTweetData(apiTweets);
-            const jsonDataTweet = JSON.parse(tweetData);
+            setTweetData(jsonDataTweet.data);
             //here we only select the 'data' attribute and not the column names
             setData(jsonDataTweet.data);
         } catch (error) {
@@ -190,7 +190,7 @@ export default function StockPresentation() {
                     spacing={2}
                   >
                     <div>
-                      <Typography variant="h3">{symbol}</Typography>
+                      <Typography variant="h3">{symbol + ' - ' + symbolMapping[symbol]}</Typography>
                       <div ref={chartRef}></div>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker className="datePicker" localeText={{ start: 'Twitter analysis start', end: 'Twitter analysis end' }} />
@@ -201,21 +201,17 @@ export default function StockPresentation() {
                     </div>
                     <div>
                       <Stack spacing={2}>
-                        <Item> 
-                          <Typography variant='body2'>
-                            Tweet 1 Preview
-                          </Typography>
-                        </Item>
-                        <Item> 
-                          <Typography variant='body2'>
-                            Tweet 2 Preview
-                          </Typography>
-                        </Item>
-                        <Item> 
-                          <Typography variant='body2'>
-                            Tweet 3 Preview
-                          </Typography>
-                        </Item>
+                        {data && data.length > 0 ? (
+                          data.map((row, index) => (
+                            <Item key={index}>
+                              <Typography variant="body2">{row[0]}</Typography>
+                              <Typography variant="body2">{row[2]}</Typography>
+                              <Typography variant="body2">{row[3]}</Typography>
+                            </Item>
+                          ))
+                        ) : (
+                          <Typography variant="body2">No tweets to show. Try to analyze tweets by selecting a time and clicking the button.</Typography>
+                        )}
                       </Stack>
                     </div>
                   </Stack>
@@ -225,20 +221,6 @@ export default function StockPresentation() {
             <div ref={tooltipRef} className="tooltip" style={{ display: 'none' }}>
               <p className="timestamp"></p>
               <p className="value"></p>
-            </div>
-
-            <div className="tweetData">
-                {data && data.length > 0 && (
-                    <>
-                        {data.map((row, index) => (
-                            <div key={index}>
-                                <p>{row[0]}</p>
-                                <p>{row[2]}</p>
-                                <p>{row[3]}</p>
-                            </div>
-                        ))}
-                    </>
-                )}
             </div>
         </>
     );

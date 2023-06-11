@@ -57,7 +57,7 @@ export default function Home() {
                 </header>
                 <div className="Centered-div" id="stockSearchbar">
                     <form className="Stock-search">
-                        <input id="symbol" ref={symbolRef} type="text" placeholder="Search stocks by symbol (e. g. META)" />
+                        <input id="symbol" ref={symbolRef} type="text" placeholder="Search stocks by symbol (e. g. AAPL)" />
                         <Button variant="contained" onClick={() => callAPI("_get_stock_data")}>OK</Button>
                     </form>
                 </div>
