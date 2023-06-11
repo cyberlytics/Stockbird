@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from src.twitter.parser import parser_three
+from sys_src.backend.src.twitter.parser import parser_three
 from pathlib import Path
 
 

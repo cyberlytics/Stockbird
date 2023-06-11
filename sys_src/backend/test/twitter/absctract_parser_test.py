@@ -1,10 +1,10 @@
 import os
 
 import pandas as pd
-import src.twitter.parser.abstract_parser as ap
+import sys_src.backend.src.twitter.parser.abstract_parser as ap
 
 from pathlib import Path
-from src.Constants import TweetColumns
+from sys_src.backend.src.Constants import TweetColumns
 
 INPUT_PATH = Path(__file__).absolute().parent.parent / 'data/input'
 OUTPUT_PATH = Path(__file__).absolute().parent.parent / 'data/output'
