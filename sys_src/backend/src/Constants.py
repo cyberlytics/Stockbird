@@ -15,6 +15,8 @@ class TweetColumns(Enum):
 
 # All relevant file names
 TWEETS_FILENAME = 'tweets.csv'
+SYMBOL_GERMANY_FILENAME = 'SymbolsGermany.csv'
+SYMBOL_USA_FILENAME = 'SymbolsUSA.csv'
 LOG_FILENAME = f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log'
 
 # All relevant path

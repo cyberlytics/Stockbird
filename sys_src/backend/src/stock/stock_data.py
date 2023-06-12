@@ -26,6 +26,16 @@ def get_data(stock_symbol: str, file_name: str):
         return df_json
 
 
+def query_stock_captions(tree: bool, *file_names):
+    """return all stock-symbols and stock-names to the available stocks."""
+    # TODO tree muss noch ausprogrammiert werden.
+    return_data = pd.DataFrame()
+    for file_name in file_names:
+        return_data = pd.concat([return_data, s3.read_csv(file_name=file_name)])
+
+    return return_data.to_json(orient='split', index=False, indent=4)
+
+
 def _is_data_updated(file_name: str):
     try:
         json_data = s3.read_json(file_name)
@@ -77,4 +87,3 @@ def filter_by_date(to_filter: str, from_date: str, to_date: str):
     filtered_df = df.loc[(df.index >= dt_from_date) & (df.index <= dt_to_date)]
 
     return filtered_df
-
