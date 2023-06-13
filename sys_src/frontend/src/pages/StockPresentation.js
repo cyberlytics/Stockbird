@@ -28,7 +28,7 @@ export default function StockPresentation() {
     const location = useLocation();
     //Both can be accessed with location.state
     //parsedResult2 contains the stockData and symbol is the Symbol name of the Stock (Used for visualizing and mapping)
-    const { parsedResult2, symbol } = location.state;
+    const { parsedResult2, symbol } = location.state || {};
     //jsonDataString is a string which contains the stockData as a String, which has to be converted into a JSON-File
     const jsonDataString = parsedResult2;
     //jsonData contains the stock-data as a jsonType Object
