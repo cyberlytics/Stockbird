@@ -11,23 +11,17 @@ export const callAPITweets = async (control, substring) => {
         body: raw,
         redirect: 'follow',
     };
-
-    //the API call and handling the response
-    return fetch('https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev', requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            try {
-                const parsedResult = JSON.parse(result).body;
-                const parsedResult2 = JSON.parse(parsedResult);
-                if (control === '_query_tweets_by_substring') {
-                    return parsedResult2;
-                }
-            } catch (error) {
-                console.log('Error parsing JSON:', error);
-            }
-        })
-        .catch(error => {
-            console.log('Error fetching data:', error);
-            throw error;
-        });
+    try {
+        const response = await fetch('https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev', requestOptions);
+        const result = await response.text();
+        const parsedResult = JSON.parse(result).body;
+        //important to parse it again, otherwise there will be problems with the return type
+        const parsedResult2 = JSON.parse(parsedResult);
+        if (control === '_query_tweets_by_substring') {
+            return parsedResult2;
+        }
+    }catch(error){
+        console.log('Error fetching data:', error);
+        throw error;
+    };
 };
