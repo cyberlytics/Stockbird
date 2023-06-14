@@ -79,10 +79,16 @@ print(retrieved_data)
 """
 
 
-def write_csv(data, file_name, header: bool):
+def write_csv(data, file_name):
     # append data to an existed csv-file on the S3 bucket and save it.
-    current_data = pd.read_csv(s3.get_object(Bucket=BUCKET, Key=file_name)['Body'])
-    appended_data_encode = pd.concat([current_data, data], ignore_index=True)\
-        .to_csv(None, index=False, header=header)\
+    current_data = pd.DataFrame()
+
+    files = [sub['Key'] for sub in s3.list_objects(Bucket=BUCKET)['Contents'] if '.csv' in sub['Key']]
+    if file_name in files:
+        current_data = pd.read_csv(s3.get_object(Bucket=BUCKET, Key=file_name)['Body'])
+
+    appended_data_encode = pd.concat([current_data, data], ignore_index=True) \
+        .to_csv(None, index=False, header=True if file_name in files else False) \
         .encode('utf-8')
+
     s3.put_object(Body=appended_data_encode, Bucket=BUCKET, Key=file_name)

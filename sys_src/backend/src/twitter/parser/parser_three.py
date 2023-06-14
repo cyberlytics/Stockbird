@@ -15,7 +15,6 @@ def _import_data(input_path: Path, user_name: str = '', user_follower: int = 0, 
                           rename_cols={'date': TweetColumns.TIMESTAMP.value, 'content': TweetColumns.TEXT.value})
 
     ap.save(_format_data(data=data, user_name=user_name, user_follower=user_follower, user_verified=user_verified),
-            header=True if input_path.is_file() else False,
             dest_path=dest_path)
 
 

@@ -16,7 +16,7 @@ def _import_data(input_path: Path, dest_path=None):
                                      'user_favourites', 'hashtags', 'is_retweet', 'source', 'id', 'favorites'],
                           rename_cols={'date': TweetColumns.TIMESTAMP.value})
 
-    ap.save(data, header=True if input_path.is_file() else False, dest_path=dest_path)
+    ap.save(data, dest_path=dest_path)
 
 
 def main():

@@ -79,15 +79,15 @@ def _format_data(data, rename_cols: {}):
     return data
 
 
-def save(data, header: bool = False, dest_path=None):
+def save(data, dest_path=None):
     """Diese Methode fügt den übergebenen Dataframe zur Datei tweets.csv hinzu."""
     data = data[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value, TweetColumns.TIMESTAMP.value,
                  TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]]
     if dest_path is None:
         # add data to data on S3 bucket.
-        s3_bucket.write_csv(data, file_name=TWEETS_FILENAME, header=header)
+        s3_bucket.write_csv(data, file_name=TWEETS_FILENAME)
         logger.info(f'added tweets to file on S3 bucket: {TWEETS_FILENAME}')
     else:
         # add data to specific destination, mainly for testing.
-        data.to_csv(dest_path, mode='a', header=header, index=False)
+        data.to_csv(dest_path, mode='a', header=False if dest_path.is_file() else True, index=False)
         logger.info(f'added tweets to file: {dest_path}')
