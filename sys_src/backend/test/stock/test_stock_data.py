@@ -34,20 +34,19 @@ class TestStockData(unittest.TestCase):
         self.dt_end_date = datetime.datetime.strptime(self.end_date, "%Y-%m-%d").date()
 
     def test_get_data(self):
-        stock_data.get_data(self.stock_symbol, self.file_name)
+        stock_data.query_stocks(self.stock_symbol, self.file_name)
         response = s3.get_object(Bucket=bucket, Key=self.file_name)
         json_data = json.loads(response['Body'].read().decode('utf-8'))
         self.assertIsNotNone(json_data)
 
-
     def test_is_data_updated(self):
-        stock_data.get_data(self.stock_symbol, self.file_name)
+        stock_data.query_stocks(self.stock_symbol, self.file_name)
         self.assertTrue(stock_data._is_data_updated(self.file_name))
         self.assertFalse(stock_data._is_data_updated(self.outdated_file_name))
 
     def test_filter_by_date(self):
-        data = stock_data.get_data(self.stock_symbol, self.file_name)
-        filtered_df = stock_data.filter_by_date(data, self.start_date, self.end_date)
+        data = stock_data.query_stocks(self.stock_symbol, self.file_name)
+        filtered_df = stock_data.query_stock_by_date(data, self.start_date, self.end_date)
 
         self.assertEqual(filtered_df.index[0], self.dt_start_date)
         self.assertEqual(filtered_df.index[-1], self.dt_end_date)
