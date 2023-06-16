@@ -12,7 +12,7 @@ import datetime
 
 
 # Checks if data is available otherwise the data gets downloaded and saved
-def get_data(stock_symbol: str, file_name: str):
+def query_stocks(stock_symbol: str, file_name: str):
     # check if data is updated
     if _is_data_updated(file_name):
         json_data = s3.read_json(file_name)
@@ -76,7 +76,7 @@ def _reindex_timestamps(df: pd.DataFrame):
     return df
 
 
-def filter_by_date(to_filter: str, from_date: str, to_date: str):
+def query_stock_by_date(to_filter: str, from_date: str, to_date: str):
     dt_from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
     dt_to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
 

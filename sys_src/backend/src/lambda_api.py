@@ -6,7 +6,7 @@ from sys_src.backend.src import stockbird_logger
 from sys_src.backend.src.Constants import *
 
 
-# define the handler function that the Lambda service will use an entry point
+# define the handler function that the Lambda service will use as an entry point
 
 
 def _query_stock_captions(event):
@@ -15,14 +15,14 @@ def _query_stock_captions(event):
     return json.dumps(df_json)
 
 
-def _get_stock_data(event):
-    df_json = stock_data.get_data(event['symbol'], f"stock_{event['symbol']}.json")
+def _query_stock_data(event):
+    df_json = stock_data.query_stocks(event['symbol'], f"stock_{event['symbol']}.json")
     return json.dumps(df_json)
 
 
-def _filter_stock_by_date(event):
-    df_json = stock_data.get_data(event['symbol'], f"stock_{event['symbol']}.json")
-    df_filtered = stock_data.filter_by_date(df_json, event['from_date'], event['to_date'])
+def _query_stock_by_date(event):
+    df_json = stock_data.query_stocks(event['symbol'], f"stock_{event['symbol']}.json")
+    df_filtered = stock_data.query_stock_by_date(df_json, event['from_date'], event['to_date'])
     return json.dumps(df_filtered)
 
 
