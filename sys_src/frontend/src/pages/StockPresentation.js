@@ -28,7 +28,7 @@ export default function StockPresentation() {
     const location = useLocation();
     //Both can be accessed with location.state
     //parsedResult2 contains the stockData and symbol is the Symbol name of the Stock (Used for visualizing and mapping)
-    const { parsedResult2, symbol } = location.state || {};
+    const { parsedResult2, symbol } = location.state;
     //jsonDataString is a string which contains the stockData as a String, which has to be converted into a JSON-File
     const jsonDataString = parsedResult2;
     //jsonData contains the stock-data as a jsonType Object
@@ -175,6 +175,10 @@ export default function StockPresentation() {
         }
     };
 
+    //defines the state variables for the selected start and end date
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
     return (
         <>
             <div>
@@ -200,7 +204,16 @@ export default function StockPresentation() {
                       <Typography variant="h3">{symbol + ' - ' + symbolMapping[symbol]}</Typography>
                       <div ref={chartRef}></div>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateRangePicker className="datePicker" localeText={{ start: 'Twitter analysis start', end: 'Twitter analysis end' }} />
+                        <DateRangePicker
+                          className="datePicker"
+                          localeText={{ start: 'Twitter analysis start', end: 'Twitter analysis end' }}
+                          start={startDate}
+                          end={endDate}
+                          onChange={(newStart, newEnd) => {
+                            setStartDate(newStart);
+                            setEndDate(newEnd);
+                          }}
+                        />
                       </LocalizationProvider>
                       <Button id="analyzeBtn" variant="contained" onClick={handleAnalyzeClick}>
                         Analyze
