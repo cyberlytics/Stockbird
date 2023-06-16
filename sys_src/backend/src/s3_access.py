@@ -1,7 +1,6 @@
 import json
 import boto3
 import pandas as pd
-from datetime import datetime
 from sys_src.backend.src.Constants import *
 
 
@@ -25,14 +24,29 @@ def write_log(log_data, file_name):
     s3.put_object(Body=log_data, Bucket=BUCKET, Key=file_name)
 
 
-def get_all_log_files():
+def get_all_logs():
     files = [sub['Key'] for sub in s3.list_objects(Bucket=BUCKET)['Contents'] if '.log' in sub['Key']]
-    return sorted(files, key=lambda date: datetime.strptime(date, 'stockbird-%Y-%m-%d.log'))
+    return sorted(files, key=lambda x: datetime.datetime.strptime(x, 'stockbird-%Y-%m-%d.log'))
 
 
-def remove_log_file():
-    if len(get_all_log_files()) >= 30 and datetime.today().strftime('%Y-%m-%d') not in get_all_log_files():
-        s3.delete_object(Bucket=BUCKET, Key=get_all_log_files()[0])
+def try_remove_oldest_log():
+    if len(get_all_logs()) >= 30 and not exists_log_for_today():
+        s3.delete_object(Bucket=BUCKET, Key=get_all_logs()[0])
+
+
+def exists_log_for_today():
+    return f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log' in get_all_logs()
+
+
+def read_log(file_name):
+    response = s3.get_object(Bucket=BUCKET, Key=file_name)
+    return response['Body'].read().decode('utf-8')
+
+
+def update_log(log_data, file_name):
+    data = read_log(file_name)
+    data += log_data
+    write_log(data, file_name)
 
 
 def update_json(file_name, updated_data):
@@ -67,6 +81,7 @@ print('Updated JSON data:', updated_data)
 def read_csv(file_name):
     response = s3.get_object(Bucket=BUCKET, Key=file_name)
     csv_data = pd.read_csv(response['Body'])
+    csv_data[TweetColumns.TIMESTAMP.value] = pd.to_datetime(csv_data[TweetColumns.TIMESTAMP.value])
     return csv_data
 
 

@@ -14,7 +14,8 @@ class AbstractParser(ABC):
 
     def __init__(self, source_path: Path):
         self.source_path: Path = source_path
-        self.dest_path: Path = DEST_PATH / TWEETS_FILENAME
+        # dest_path is not used anymore, cause of the s3 Bucket
+        self.dest_path: Path
         self.format_type: str = source_path.suffix
         self.data: pd.DataFrame = self._import_data()
 
@@ -40,7 +41,7 @@ class AbstractParser(ABC):
 
     def _change_timestamp_format(self, time_format: str = None):
         self.data[TweetColumns.TIMESTAMP.value] = \
-            pd.to_datetime(self.data[TweetColumns.TIMESTAMP.value], format=time_format)
+            pd.to_datetime(self.data[TweetColumns.TIMESTAMP.value], format=time_format, utc=True)
         logger.info(f'changed timestamp format to default datetime format')
 
     def _change_column_order(self, column_list: list):
@@ -49,10 +50,8 @@ class AbstractParser(ABC):
 
     def append_to_file(self):
         """add tweets to a given file if file does not exist it will be created"""
-        self.data.to_csv(self.dest_path, mode='a', index=False,
-                         header=False if self.dest_path.is_file() else True)
-        s3_bucket.write_csv(self.data, file_name=TWEETS_FILENAME, header=False if self.dest_path.is_file() else True)
-        logger.info(f'added tweets to file: {self.dest_path}')
+        s3_bucket.write_csv(self.data, file_name=TWEETS_FILENAME)
+        logger.info(f'added tweets to {TWEETS_FILENAME} in s3 bucket')
 
 
 def import_data(input_path: Path, use_cols: list, drop_cols: list, rename_cols: {}):
