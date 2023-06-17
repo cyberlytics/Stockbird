@@ -12,7 +12,9 @@ import { styled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { callAPITweets } from './api'; // Import the callAPI function
+import { callAPITweets } from './api';
+import RotateLoader from "react-spinners/RotateLoader";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -42,6 +44,11 @@ export default function StockPresentation() {
     //useRef allows the manipulation of the DOM, where we plot the stock if data is available
     const chartRef = useRef(null);
     const tooltipRef = useRef(null);
+
+    //For the loading animation after button click
+    const [loading,setLoading] = useState(false);
+    //If tweets are available for a stock, then it should display it, if not there should be a message
+    const [tweets,setTweets] = useState(true);
 
     //here we map our symbols to the corresponding name of the Company which is necessary for receiving the right tweets
     const symbolMapping = {
@@ -164,14 +171,23 @@ export default function StockPresentation() {
     //we store all the information we get from the 'callAPITweets' in the jsonDataTweet
     const handleAnalyzeClick = async () => {
         try {
+            //set the loading animation to true
+            setLoading(true);
+
             const apiTweets = await callAPITweets('_query_tweets_by_substring', secondParameter);
             const jsonDataTweet = JSON.parse(apiTweets);
-            //here we set the tweetData value to the tweets we get back, but here are some information we don't need like
+            setTweets(true);
+            //here we set the tweetData value to the tweets we get back, but here are some information we don't need
             setTweetData(jsonDataTweet.data);
             //here we only select the 'data' attribute and not the column names
             setData(jsonDataTweet.data);
         } catch (error) {
+            setTweets(false);
+            setLoading(false);
             console.log('Error during API call:', error);
+        }finally {
+            //after we set the data, the loading animation should stop, so the user can click on the button again
+            setLoading(false);
         }
     };
 
@@ -215,9 +231,18 @@ export default function StockPresentation() {
                           }}
                         />
                       </LocalizationProvider>
-                      <Button id="analyzeBtn" variant="contained" onClick={handleAnalyzeClick}>
+                      <Button
+                          id="analyzeBtn"
+                          variant="contained"
+                          onClick={handleAnalyzeClick}
+                          disabled={loading}
+                      >
                         Analyze
                       </Button>
+                        <RotateLoader
+                            loading={loading}
+                            size={20}
+                            color="blue"/>
                     </div>
                     <div>
                       <Stack spacing={2}>
@@ -230,7 +255,9 @@ export default function StockPresentation() {
                             </Item>
                           ))
                         ) : (
-                          <Typography variant="body2">No tweets to show. Try to analyze tweets by selecting a time and clicking the button.</Typography>
+                          <Typography variant="body2">
+                              {!tweets ? 'No tweets to show. Try to analyze tweets by selecting a time and clicking the button.' : ''}
+                          </Typography>
                         )}
                       </Stack>
                     </div>
