@@ -10,12 +10,16 @@ from datetime import timedelta
 
 import datetime
 
+import sys_src.backend.src.stockbird_logger as stockbird_logger
+
+logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 # Checks if data is available otherwise the data gets downloaded and saved
 def query_stocks(stock_symbol: str, file_name: str):
     # check if data is updated
     if _is_data_updated(file_name):
         json_data = s3.read_json(file_name)
+        logger.info(f'"{file_name}" is up to date')
         return json_data
     else:
         #get data and save in a dataframe
@@ -23,6 +27,7 @@ def query_stocks(stock_symbol: str, file_name: str):
         data = ticker.history(period='max', interval='1d')
         df_json = pd.DataFrame(data).to_json()
         s3.write_json(df_json, file_name)
+        logger.info(f'"{file_name}" wasn`t up to date, new data saved in "{df_json}"')
         return df_json
 
 
@@ -32,7 +37,7 @@ def query_stock_captions(tree: bool, *file_names):
     return_data = pd.DataFrame()
     for file_name in file_names:
         return_data = pd.concat([return_data, s3.read_csv(file_name=file_name)])
-
+    logger.info(f'stock-symbols and stock-names for available stocks saved in "{return_data.to_json}"')
     return return_data.to_json(orient='split', index=False, indent=4)
 
 
@@ -52,10 +57,17 @@ def _is_data_updated(file_name: str):
         else:
             most_recent_day = today - timedelta(days=1)
 
+        if df.index[-1] == most_recent_day:
+            logger.info('The data is up to date')
+        else:
+            #maybe a warning would be appropriate
+            logger.info('The data is outdated')
+
         # yfinance only downloads data from one day ago
         return df.index[-1] == most_recent_day
 
     except:
+        logger.info('There was an error during the file reading proccess')
         return False
 
 
@@ -72,7 +84,7 @@ def _reindex_timestamps(df: pd.DataFrame):
         dt_index.append(dt)
 
     df = df.set_index(pd.Index(dt_index))
-
+    logger.info('The timestamps of the dataframe are updated')
     return df
 
 
@@ -85,5 +97,5 @@ def query_stock_by_date(to_filter: str, from_date: str, to_date: str):
     df = _reindex_timestamps(df)
 
     filtered_df = df.loc[(df.index >= dt_from_date) & (df.index <= dt_to_date)]
-
+    logger.info(f'Data from the {from_date} up till the {to_date}')
     return filtered_df
