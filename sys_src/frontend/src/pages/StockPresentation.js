@@ -60,7 +60,18 @@ export default function StockPresentation() {
     };
 
     //in this variable we store in the symbol because in the api.js we need a substring for the backend for filtering the tweets where for example 'Dogecoin' is included the tweet
-    const secondParameter = symbolMapping[symbol];
+    var secondParameter = symbolMapping[symbol];
+
+    //string for title
+    var titleMapped="";
+
+    //if symbol can't be mapped, we have to save the symbol as secondParameter
+    if (secondParameter == undefined) {
+      secondParameter = symbol;
+    }
+    else {
+      titleMapped = " - " + secondParameter;
+    }
 
     //draws the chart when the stock-data is available
     useEffect(() => {
@@ -217,7 +228,7 @@ export default function StockPresentation() {
                     spacing={2}
                   >
                     <div>
-                      <Typography variant="h3">{symbol + ' - ' + symbolMapping[symbol]}</Typography>
+                      <Typography variant="h3">{symbol + titleMapped}</Typography>
                       <div ref={chartRef}></div>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
