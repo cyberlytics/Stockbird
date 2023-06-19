@@ -270,8 +270,8 @@ export default function StockPresentation() {
                             </Item>
                           ))
                         ) : (
-                          <Typography variant="body2">
-                              {!tweets ? 'No tweets to show.' : ' Try to analyze tweets by selecting a time and clicking the button.'}
+                          <Typography variant="body2" style={{ backgroundColor: !tweets ? '#ffb3b3' : 'aliceblue', padding: '30px' }}>
+                              {!tweets ? 'Found no tweets of this stock.' : ' Try to analyze tweets by selecting a time and clicking the button.'}
                           </Typography>
                         )}
                       </Stack>
