@@ -47,7 +47,7 @@ def _is_data_updated(file_name: str):
         json_data = json.loads(json_data)
 
         df = pd.DataFrame(json_data)
-        df = _reindex_timestamps(df)
+        df = reindex_timestamps(df)
 
         today = date.today()
         # if today is a monday, the last available data from yfinance should be friday today - 3 days
@@ -71,7 +71,7 @@ def _is_data_updated(file_name: str):
         return False
 
 
-def _reindex_timestamps(df: pd.DataFrame):
+def reindex_timestamps(df: pd.DataFrame):
     dt_index = []
 
     for timestamp_ms in df.index:
@@ -94,7 +94,7 @@ def query_stock_by_date(to_filter: str, from_date: str, to_date: str):
 
     json_data = json.loads(to_filter)
     df = pd.DataFrame(json_data)
-    df = _reindex_timestamps(df)
+    df = reindex_timestamps(df)
 
     filtered_df = df.loc[(df.index >= dt_from_date) & (df.index <= dt_to_date)]
     logger.info(f'Data from the {from_date} up till the {to_date}')

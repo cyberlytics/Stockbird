@@ -1,12 +1,15 @@
 import atexit
 import json
 import stock.stock_data as stock_data
+import stock.stock_analysis as stock_analysis
 import twitter.tweet_utils as tweet_utils
 from sys_src.backend.src import stockbird_logger
 from sys_src.backend.src.Constants import *
 
 
 # define the handler function that the Lambda service will use as an entry point
+# TODO: Abfragen der Stock data in eine API-Funktion schreiben, die je nach übergegebenen Parametern die passende Funktion aufruft
+
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 def _query_stock_captions(event):
@@ -22,6 +25,10 @@ def _query_stock_data(event):
     logger.info(f'Stock data for" {event["symbol"]}" Ticker')
     return json.dumps(df_json)
 
+def _query_stock_peaks(event):
+    df_json = stock_data.query_stocks(event['symbol'], f"stock_{event['symbol']}.json")
+    json_file = stock_analysis.query_peaks_from_stock(df_json, event['days'], event['percent'])
+    return json_file
 
 def _query_stock_by_date(event):
     df_json = stock_data.query_stocks(event['symbol'], f"stock_{event['symbol']}.json")
