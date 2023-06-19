@@ -71,6 +71,10 @@
     z-index: 999;
 }
 
+.loadingAnimationTweet {
+
+}
+
 .logoSpace {
     margin-left: 1%;
 }
@@ -86,7 +90,14 @@
     margin-right: auto;
     margin-top: 50px;
     width: 50%;
-}  
+}
+
+.loadingAnimationStock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 #stockSearchbar {
     width: 25%;
@@ -118,4 +129,3 @@
 #othlogo {
     width: 10%;
 }
-

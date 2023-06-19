@@ -12,7 +12,7 @@ describe('Testing the Tweet API call', () => {
         const parsedResult = JSON.parse(result);
 
         // With this line, you can see the 'data' column in the console. Be aware that there could be many tweets.
-        console.log('API Result:', parsedResult.data);
+        //console.log('API Result:', parsedResult.data);
 
         expect(parsedResult.data).toBeDefined();
     });

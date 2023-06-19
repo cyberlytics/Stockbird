@@ -31,8 +31,18 @@ def _query_stock_by_date(event):
     return json.dumps(df_filtered)
 
 
-def _query_tweets_by_stock_name(event):
-    df_json = tweet_utils.query_tweets_by_stock_name(TWEETS_FILENAME, event['stock_name'])
+def _query_tweets(event):
+    """Diese Funktion gibt alle vorhandenen Tweets aus. Optional kann als Parameter date_from, date_to übergeben werden,
+    um die Tweets nach datum einzuschränken"""
+    df_json = tweet_utils.query_tweets(TWEETS_FILENAME, event.get('date_from'), event.get('date_to'))
+    return json.dumps(df_json)
+
+
+def _query_tweets_by_stock(event):
+    """Diese Funktion gibt alle Tweets zurück, welche die übergebenen schlagwörter im Text beinhalten.
+    Optional kann nach datum eingeschränkt werden"""
+    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event['date_to'],
+                                                event['substrings'])
     return json.dumps(df_json)
 
 
