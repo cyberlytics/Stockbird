@@ -1,0 +1,8 @@
+{
+  "short_name": "Stockbird",
+  "name": "Stockbird",
+  "start_url": "App.js",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
