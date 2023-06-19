@@ -192,6 +192,10 @@ export default function StockPresentation() {
             setTweetData(jsonDataTweet.data);
             //here we only select the 'data' attribute and not the column names
             setData(jsonDataTweet.data);
+            //if no tweets with this substring are found, it it sets setTweets to false
+            if (tweetData == '') {
+              setTweets(false);
+            }
         } catch (error) {
             setTweets(false);
             setLoading(false);
@@ -267,7 +271,7 @@ export default function StockPresentation() {
                           ))
                         ) : (
                           <Typography variant="body2">
-                              {!tweets ? 'No tweets to show. Try to analyze tweets by selecting a time and clicking the button.' : ''}
+                              {!tweets ? 'No tweets to show.' : ' Try to analyze tweets by selecting a time and clicking the button.'}
                           </Typography>
                         )}
                       </Stack>
