@@ -88,7 +88,7 @@ def test_save_data():
     _remove_file(OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
 
     save_data = pd.read_csv(INPUT_PATH / 'abstract_parser_test_data.csv')
-    ap.save(save_data, header=True, dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
+    ap.save(save_data, dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
 
     _assert_data_frames(OUTPUT_PATH / 'abstract_parser_save_test_data.csv',
                         OUTPUT_PATH / 'abstract_parser_import_test_control_data.csv')
@@ -99,8 +99,8 @@ def test_save_data_append():
     _remove_file(OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
 
     save_data = pd.read_csv(INPUT_PATH / 'abstract_parser_test_data.csv')
-    ap.save(save_data, header=True, dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
-    ap.save(save_data, header=False, dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
+    ap.save(save_data,  dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
+    ap.save(save_data, dest_path=OUTPUT_PATH / 'abstract_parser_save_test_data.csv')
 
     _assert_data_frames(OUTPUT_PATH / 'abstract_parser_save_test_data.csv',
                         OUTPUT_PATH / 'abstract_parser_save_test_append_control_data.csv')
