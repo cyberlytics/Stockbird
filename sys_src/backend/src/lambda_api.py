@@ -1,9 +1,9 @@
 import atexit
 import json
-import stock.stock_data as stock_data
-import stock.stock_analysis as stock_analysis
-import twitter.tweet_utils as tweet_utils
-from sys_src.backend.src import stockbird_logger
+import sys_src.backend.stock.stock_data as stock_data
+import sys_src.backend.stock.stock_analysis as stock_analysis
+import sys_src.backend.twitter.tweet_utils as tweet_utils
+import stockbird_logger
 from sys_src.backend.src.Constants import *
 
 
@@ -32,9 +32,9 @@ def _query_stock_peaks(event):
 
 def _query_stock_by_date(event):
     df_json = stock_data.query_stocks(event['symbol'], f"stock_{event['symbol']}.json")
-    df_filtered = stock_data.query_stock_by_date(df_json, event['from_date'], event['to_date'])
-    logger.info(f'Stock data for " {event["symbol"]}" from {event["from_date"]} to {event["to_date"]}')
-    return json.dumps(df_filtered)
+    df_filtered = stock_data.query_stock_by_date(df_json, event['date_from'], event['date_to'])
+    logger.info(f'Stock data for "{event["symbol"]}" from {event["date_from"]} to {event["date_to"]}')
+    return json.dumps(df_filtered.to_dict(orient='records'))
 
 
 def _query_tweets(event):
@@ -63,7 +63,7 @@ def _query_relevant_tweets_by_stock(event):
 
 
 def lambda_handler(event, context):
-    atexit.register(stockbird_logger.write_log())
+    atexit.register(stockbird_logger.write_log)
     return {
         'statusCode': 200,
         'body': globals()[event['control']](event)

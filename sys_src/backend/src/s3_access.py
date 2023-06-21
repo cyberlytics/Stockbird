@@ -2,7 +2,7 @@ import json
 import boto3
 import pandas as pd
 from sys_src.backend.src.Constants import *
-from sys_src.backend.src import stockbird_logger
+import stockbird_logger
 
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 
@@ -41,12 +41,11 @@ def try_remove_oldest_log():
 
 
 def exists_log_for_today():
-    if f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log' in get_all_logs() :
+    if f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log' in get_all_logs():
         logger.info("There are logs available for today")
     else:
         logger.info("There are no logs available for today")
     return f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log' in get_all_logs()
-
 
 
 def read_log(file_name):
@@ -97,6 +96,14 @@ def read_csv(file_name):
     csv_data = pd.read_csv(response['Body'])
     csv_data[TweetColumns.TIMESTAMP.value] = pd.to_datetime(csv_data[TweetColumns.TIMESTAMP.value])
     logger.info(f'"{file_name}" has been read timestamped and converted to panda')
+    return csv_data
+
+
+# Read CSV data from a file in S3
+def read_csv_for_stock_captions(file_name):
+    response = s3.get_object(Bucket=BUCKET, Key=file_name)
+    csv_data = pd.read_csv(response['Body'])
+    logger.info(f'"{file_name}" has been read and converted to panda')
     return csv_data
 
 

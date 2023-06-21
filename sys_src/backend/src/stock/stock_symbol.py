@@ -1,7 +1,7 @@
 import csv
 import os
 import sys
-import sys_src.backend.src.stockbird_logger as stockbird_logger
+import backend.src.stockbird_logger as stockbird_logger
 
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 

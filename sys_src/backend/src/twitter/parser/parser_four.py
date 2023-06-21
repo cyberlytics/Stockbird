@@ -1,6 +1,6 @@
 import argparse
 
-import sys_src.backend.src.twitter.parser.abstract_parser as ap
+import backend.src.twitter.parser.abstract_parser as ap
 
 from pathlib import Path
 from sys_src.backend.src import stockbird_logger

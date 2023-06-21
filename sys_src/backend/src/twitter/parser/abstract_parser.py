@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-import sys_src.backend.src.s3_access as s3_bucket
-import sys_src.backend.src.stockbird_logger as stockbird_logger
+import backend.src.s3_access as s3_bucket
+import backend.src.stockbird_logger as stockbird_logger
 
 from abc import ABC
-from sys_src.backend.src.Constants import *
+from backend.src.Constants import *
 
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 

@@ -1,6 +1,6 @@
 import argparse
 from abstract_parser import *
-from sys_src.backend.src.Constants import TweetColumns
+from Constants import TweetColumns
 
 
 class ParserFive(AbstractParser):
@@ -32,6 +32,7 @@ def main():
     args = add_args()
     parser = ParserFive(Path(args.input_path))
     parser.append_to_file()
+    stockbird_logger.write_log()
 
 
 if __name__ == "__main__":

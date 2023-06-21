@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-import backend.src.stock.stock_data as stock_data
+import stock.stock_data as stock_data
 
 
 def query_peaks_from_stock(str_data: str, days: int, percent: float):

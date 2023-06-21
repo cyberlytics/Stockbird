@@ -1,6 +1,6 @@
 import argparse
 from abstract_parser import *
-from sys_src.backend.src.Constants import TweetColumns
+from backend.src.Constants import TweetColumns
 
 
 class ParserFive(AbstractParser):

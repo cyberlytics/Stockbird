@@ -2,15 +2,16 @@ import json
 
 import yfinance
 import pandas as pd
+from backend.src.Constants import *
 
-import sys_src.backend.src.s3_access as s3
+import backend.src.s3_access as s3
 
 from datetime import date
 from datetime import timedelta
 
 import datetime
 
-import sys_src.backend.src.stockbird_logger as stockbird_logger
+import backend.src.stockbird_logger as stockbird_logger
 
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 
@@ -36,7 +37,7 @@ def query_stock_captions(tree: bool, *file_names):
     # TODO tree muss noch ausprogrammiert werden.
     return_data = pd.DataFrame()
     for file_name in file_names:
-        return_data = pd.concat([return_data, s3.read_csv(file_name=file_name)])
+        return_data = pd.concat([return_data, s3.read_csv_for_stock_captions(file_name=file_name)])
     logger.info(f'stock-symbols and stock-names for available stocks saved in "{return_data.to_json}"')
     return return_data.to_json(orient='split', index=False, indent=4)
 

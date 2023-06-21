@@ -1,13 +1,12 @@
 import argparse
 from abstract_parser import *
-from sys_src.backend.src.Constants import TweetColumns
+from Constants import TweetColumns
 
 
 class ParserTwo(AbstractParser):
 
     def __init__(self, source_path: Path):
         super().__init__(source_path)
-
         self._remove_unused_columns(['id', 'url', 'company_names', 'symbols'])
         self._rename_columns({'verified': TweetColumns.USERVERIFIED.value,
                               'source': TweetColumns.USERNAME.value})
@@ -31,6 +30,7 @@ def main():
     args = add_args()
     parser = ParserTwo(Path(args.input_path))
     parser.append_to_file()
+    stockbird_logger.write_log()
 
 
 if __name__ == "__main__":
