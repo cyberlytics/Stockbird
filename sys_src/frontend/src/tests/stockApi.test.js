@@ -22,7 +22,7 @@ describe('Home', () => {
     expect(global.fetch).toHaveBeenCalledWith('https://szlw5m95d9.execute-api.eu-central-1.amazonaws.com/dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ control: '_get_stock_data', symbol: 'AAPL' }),
+      body: JSON.stringify({ control: '_query_stock_data', symbol: 'AAPL' }),
       redirect: 'follow',
     });
 

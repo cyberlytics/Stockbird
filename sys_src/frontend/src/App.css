@@ -94,6 +94,9 @@
     align-items: center;
 }
 
+.tweetStack {
+    margin-right: 8%;
+}
 
 #stockSearchbar {
     width: 25%;

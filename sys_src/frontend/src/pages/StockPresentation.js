@@ -66,7 +66,7 @@ export default function StockPresentation() {
     var titleMapped="";
 
     //if symbol can't be mapped, we have to save the symbol as secondParameter
-    if (secondParameter == undefined) {
+    if (secondParameter === undefined) {
       secondParameter = symbol;
     }
     else {
@@ -85,7 +85,6 @@ export default function StockPresentation() {
         //'Close' includes the information we want to plot to the screen
         //Other attributes are for example: Open,High,Low,Volume,Dividends,Stock Splits
         const jsonDataClose = jsonData.Close;
-        // Die Zeitangaben in der JSON-Datei sind vom Typ UNIX und werden entsprechend umgewandelt
         //the timestamps have the type of UNIX, with this map function we iterate through each element and parse the values from the 'Close' attribute
         const data = Object.entries(jsonDataClose).map(([timestamp, value]) => ({
             timestamp: parseInt(timestamp),
@@ -185,7 +184,7 @@ export default function StockPresentation() {
             //set the loading animation to true
             setLoading(true);
 
-            const apiTweets = await callAPITweets('_query_tweets_by_substring', secondParameter);
+            const apiTweets = await callAPITweets('_query_tweets_by_stock', startDate, endDate, secondParameter);
             const jsonDataTweet = JSON.parse(apiTweets);
             setTweets(true);
             //here we set the tweetData value to the tweets we get back, but here are some information we don't need
@@ -193,7 +192,7 @@ export default function StockPresentation() {
             //here we only select the 'data' attribute and not the column names
             setData(jsonDataTweet.data);
             //if no tweets with this substring are found, it it sets setTweets to false
-            if (tweetData == '') {
+            if (tweetData === '') {
               setTweets(false);
             }
         } catch (error) {
@@ -260,12 +259,12 @@ export default function StockPresentation() {
                             color="blue"/>
                     </div>
                     <div>
-                      <Stack spacing={2}>
+                      <Stack className='tweetStack' spacing={2}>
                         {data && data.length > 0 ? (
                           data.map((row, index) => (
                             <Item key={index}>
                               <Typography variant="body2">{row[0]}</Typography>
-                              <Typography variant="body2">{row[2]}</Typography>
+                              <Typography variant="body2">{new Date(row[2]).toLocaleDateString()}</Typography>
                               <Typography variant="body2">{row[3]}</Typography>
                             </Item>
                           ))
