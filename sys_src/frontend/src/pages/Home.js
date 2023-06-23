@@ -38,7 +38,7 @@ export default function Home() {
                 try {
                     const parsedResult = JSON.parse(result).body;
                     const parsedResult2 = JSON.parse(parsedResult);
-                    if (control === "_get_stock_data") {
+                    if (control === "_query_stock_data") {
                         console.log(parsedResult2.length);
                         //when the length of the string of the stock is less than 1000, then it should not navigate to the next component
                         //because some random text input has a data length of '68' or sometimes '256'
@@ -73,7 +73,7 @@ export default function Home() {
                         <input id="symbol" ref={symbolRef} type="text" placeholder="Search stocks by symbol (e. g. AAPL)" />
                         <Button
                             variant="contained"
-                            onClick={() => callAPI("_get_stock_data")}
+                            onClick={() => callAPI("_query_stock_data")}
                             disabled={loading}
                         >OK
 
