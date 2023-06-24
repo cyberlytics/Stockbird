@@ -202,6 +202,8 @@ export default function StockPresentation() {
         }finally {
             //after we set the data, the loading animation should stop, so the user can click on the button again
             setLoading(false);
+            console.log(startDate);
+            console.log(endDate);
         }
     };
 
@@ -240,8 +242,22 @@ export default function StockPresentation() {
                           start={startDate}
                           end={endDate}
                           onChange={(newStart, newEnd) => {
-                            setStartDate(newStart);
-                            setEndDate(newEnd);
+                            setStartDate(newStart.toLocaleString('en-US', {
+                              year: '2-digit',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                            }));
+                            setEndDate(newEnd.toLocaleString('en-US', {
+                              year: '2-digit',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              second: '2-digit',
+                            }));
                           }}
                         />
                       </LocalizationProvider>
