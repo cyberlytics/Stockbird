@@ -13,16 +13,20 @@ def query_tweets_by_stock(tweets_file_name: str, date_from, date_to, substrings:
     for stock_name in substrings.split(','):
         result_df = pd.concat([result_df, _query_tweets_by_substring(df, TweetColumns.TEXT, stock_name)])
     result_df = _query_tweets_by_date(result_df,
-                               datetime.strptime(date_from, FRONTEND_DATE_FORMAT) if date_from is not None else None,
-                               datetime.strptime(date_to, FRONTEND_DATE_FORMAT) if date_to is not None else None)
+                                      datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
+                                      .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
+                                      datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
+                                      .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
     return result_df.to_json(orient='split', index=False, indent=4)
 
 
 def query_tweets(tweets_file_name: str, date_from, date_to):
     df = s3.read_csv(tweets_file_name)
     df = _query_tweets_by_date(df,
-                               datetime.strptime(date_from, FRONTEND_DATE_FORMAT) if date_from is not None else None,
-                               datetime.strptime(date_to, FRONTEND_DATE_FORMAT) if date_to is not None else None)
+                               datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
+                               .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
+                               datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
+                               .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
     return df.to_json(orient='split', index=False, indent=4)
 
 
