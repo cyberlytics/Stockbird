@@ -2,6 +2,7 @@
 
 
 ## URL
+You can access our website through this link:
 http://stockbird-frontend-s3.s3-website.eu-central-1.amazonaws.com/
 
 ## Copyright and Licenses
@@ -13,10 +14,11 @@ For detailed license information, see the LICENSE file in the project root. <br>
 ## Description
 Stockbird is a modern web application where you can find out how relevant tweets influence the stock market. It was developed by a group of students from the OTH Amberg-Weiden.
 
-## Installation
+## Installation and run
 In order to run the project with your IDE, you need to have installed <br>
-- Node.js
-- npm
+- Node.js (Download: https://nodejs.org/en/download)
+- npm (Download: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+Then you need to execute this command in the IDE terminal: ```npm run```
 
 ## Authors 
 Baygin, Baran <br>
