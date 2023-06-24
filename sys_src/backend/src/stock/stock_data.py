@@ -90,6 +90,9 @@ def reindex_timestamps(df: pd.DataFrame):
 
 
 def query_stock_by_date(to_filter: str, from_date: str, to_date: str):
+# TODO noch auf das Zeitformat '%a, %d %b %Y %H:%M:%S %Z' umändern Konstante bereits in File Constant.py vorhanden
+#  (FRONTEND_DATE_FORMAT). Tipp strptime fügt keine Zeitzone hinzu, um das zu umgehen muss man danach den aufruf
+#  .replace(tzinfo=datetime.timezone.utc) anhängen, ähnlich wie bei tweet_utils.py Zeile 15-18.
     dt_from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
     dt_to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
 
