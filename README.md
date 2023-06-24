@@ -2,7 +2,7 @@
 
 
 ## URL
-You can access our website through this link:
+You can access our website through this link: <br>
 http://stockbird-frontend-s3.s3-website.eu-central-1.amazonaws.com/
 
 ## Copyright and Licenses
@@ -17,7 +17,7 @@ Stockbird is a modern web application where you can find out how relevant tweets
 ## Installation and run
 In order to run the project with your IDE, you need to have installed <br>
 - Node.js (Download: https://nodejs.org/en/download)
-- npm (Download: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- npm (Download: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) <br>
 Then you need to execute this command in the IDE terminal: ```npm run```
 
 ## Authors 
