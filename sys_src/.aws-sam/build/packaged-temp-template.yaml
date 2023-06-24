@@ -5,7 +5,7 @@ Resources:
       Timeout: 300
       MemorySize: 128
       Handler: lambda_api.lambda_handler
-      CodeUri: s3://stockbird-lambda-temp-storage/2a46dd9caee8d3efdfdc2245a3f9f9dc
+      CodeUri: s3://stockbird-lambda-temp-storage/dac199985ca80ba56917dc70b59833f0
       Runtime: python3.9
       Architectures:
       - x86_64

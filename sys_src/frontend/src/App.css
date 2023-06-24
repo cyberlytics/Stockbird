@@ -36,13 +36,95 @@
     padding: 30px;
 }
 
-#Colored-search {
-    background-color: #dbccae;
-    width: 30%;
+.stockPresentation {
+    margin: 50px;
+}
+
+.tweetData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.datePicker {
+    margin-top: 30px;
+    width: 50%;
+    float: left;
+}
+
+.spHeader {
+    background-color: aliceblue;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tooltip {
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    z-index: 999;
+}
+
+.logoSpace {
+    margin-left: 1%;
+}
+
+.impressumSpace {
+    margin-right: 1%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.impressumBody {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 50%;
+}
+
+.loadingAnimationStock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tweetStack {
+    margin-right: 8%;
+}
+
+#stockSearchbar {
+    width: 25%;
 }
 
 #symbol {
     height: 30px;
     width: 100%;
     margin-right: 5px;
+}
+
+#splogo {
+    width: 30%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#analyzeBtn {
+    margin-top: 40px;
+    margin-left: 20px;
+    overflow: hidden;
+}
+
+#projectBy, #collabWith {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#othlogo {
+    width: 10%;
 }

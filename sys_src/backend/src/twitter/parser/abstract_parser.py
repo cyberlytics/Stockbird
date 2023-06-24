@@ -1,19 +1,21 @@
-from abc import ABC
 import numpy as np
 import pandas as pd
 
-import sys_src.backend.src.StockbirdLogger as StockbirdLogger
+import backend.src.s3_access as s3_bucket
+import backend.src.stockbird_logger as stockbird_logger
 
-from sys_src.backend.src.Constants import *
+from abc import ABC
+from backend.src.Constants import *
 
-logger = StockbirdLogger.get_logger(LOGGER_NAME)
+logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 
 class AbstractParser(ABC):
 
     def __init__(self, source_path: Path):
         self.source_path: Path = source_path
-        self.dest_path: Path = DEST_PATH / TWEETS_FILENAME
+        # dest_path is not used anymore, cause of the s3 Bucket
+        self.dest_path: Path
         self.format_type: str = source_path.suffix
         self.data: pd.DataFrame = self._import_data()
 
@@ -39,7 +41,7 @@ class AbstractParser(ABC):
 
     def _change_timestamp_format(self, time_format: str = None):
         self.data[TweetColumns.TIMESTAMP.value] = \
-            pd.to_datetime(self.data[TweetColumns.TIMESTAMP.value], format=time_format)
+            pd.to_datetime(self.data[TweetColumns.TIMESTAMP.value], format=time_format, utc=True)
         logger.info(f'changed timestamp format to default datetime format')
 
     def _change_column_order(self, column_list: list):
@@ -48,23 +50,23 @@ class AbstractParser(ABC):
 
     def append_to_file(self):
         """add tweets to a given file if file does not exist it will be created"""
-        self.data.to_csv(self.dest_path, mode='a', index=False,
-                         header=False if self.dest_path.is_file() else True)
-        logger.info(f'added tweets to file: {self.dest_path}')
+        s3_bucket.write_csv(self.data, file_name=TWEETS_FILENAME)
+        logger.info(f'added tweets to {TWEETS_FILENAME} in s3 bucket')
 
 
 def import_data(input_path: Path, use_cols: list, drop_cols: list, rename_cols: {}):
     """Das ist die standartmethode zum Importieren und parsen der Daten. Durch die Übergabeparameter werden die
        Datei abhängigen Attribute gesetzt, entfernt und umbenannt."""
-    print(use_cols)
     if "csv" in input_path.suffix:
         data = pd.read_csv(input_path, usecols=use_cols, on_bad_lines='skip')
     elif "json" in input_path.suffix:
         data = pd.read_json(input_path, orient='split')
         data.drop(drop_cols, axis=1, inplace=True)
     else:
+        logger.info(f'The given File {input_path} is no .csv or .json file-format.')
         raise ValueError("Input must be .csv or .json!")
 
+    logger.info(f'The import of the given File {input_path} was successful.')
     return _format_data(data, rename_cols=rename_cols)
 
 
@@ -72,12 +74,19 @@ def _format_data(data, rename_cols: {}):
     data.dropna(inplace=True)
     data.drop_duplicates(inplace=True)
     data.rename(columns=rename_cols, inplace=True)
-    data[TweetColumns.TIMESTAMP.value] = pd.to_datetime(data[TweetColumns.TIMESTAMP.value])
+    data[TweetColumns.TIMESTAMP.value] = pd.to_datetime(data[TweetColumns.TIMESTAMP.value], utc=True)
     return data
 
 
-def save(data, header: bool):
+def save(data, dest_path=None):
     """Diese Methode fügt den übergebenen Dataframe zur Datei tweets.csv hinzu."""
-    data[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value, TweetColumns.TIMESTAMP.value,
-          TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]] \
-        .to_csv(DEST_PATH / TWEETS_FILENAME, mode='a', header=header, index=False)
+    data = data[[TweetColumns.USERNAME.value, TweetColumns.USERFOLLOWERS.value, TweetColumns.TIMESTAMP.value,
+                 TweetColumns.TEXT.value, TweetColumns.RETWEETS.value, TweetColumns.USERVERIFIED.value]]
+    if dest_path is None:
+        # add data to data on S3 bucket.
+        s3_bucket.write_csv(data, file_name=TWEETS_FILENAME)
+        logger.info(f'added tweets to file on S3 bucket: {TWEETS_FILENAME}')
+    else:
+        # add data to specific destination, mainly for testing.
+        data.to_csv(dest_path, mode='a', header=False if dest_path.is_file() else True, index=False)
+        logger.info(f'added tweets to file: {dest_path}')

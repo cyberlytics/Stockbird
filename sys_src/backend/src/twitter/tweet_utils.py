@@ -1,76 +1,49 @@
-import datetime
-import os
-
 import sys_src.backend.src.s3_access as s3
 import pandas as pd
-import sys_src.backend.src.StockbirdLogger as StockbirdLogger
-
+import sys_src.backend.src.stockbird_logger as stockbird_logger
+from datetime import datetime
 from sys_src.backend.src.Constants import *
 
-logger = StockbirdLogger.get_logger(LOGGER_NAME)
+logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 
-def query_tweets_by_stockname(tweets_file_name: str, stock_name: str):
-    """try to find every tweet containing the stockname in its text"""
-    df = get_tweets_from_csv(s3.read_csv(tweets_file_name))
-    df = _query_tweets_by_substring(df, stock_name, TweetColumns.TEXT)
-    create_json(df, DEST_PATH / 'tweets_by_stockname.json')
+def query_tweets_by_stock(tweets_file_name: str, date_from, date_to, substrings: str):
+    df = s3.read_csv(tweets_file_name)
+    result_df = pd.DataFrame(data=None, columns=df.columns)
+    for stock_name in substrings.split(','):
+        result_df = pd.concat([result_df, _query_tweets_by_substring(df, TweetColumns.TEXT, stock_name)])
+    result_df = _query_tweets_by_date(result_df,
+                                      datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
+                                      .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
+                                      datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
+                                      .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
+    return result_df.to_json(orient='split', index=False, indent=4)
 
 
-def _query_tweets_by_substring(df: pd.DataFrame, sub_string: str, column: TweetColumns):
+def query_tweets(tweets_file_name: str, date_from, date_to):
+    df = s3.read_csv(tweets_file_name)
+    df = _query_tweets_by_date(df,
+                               datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
+                               .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
+                               datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
+                               .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
+    return df.to_json(orient='split', index=False, indent=4)
+
+
+def _query_tweets_by_substring(df: pd.DataFrame, column: TweetColumns, sub_string: str):
+    """Returns all entries of a Dataframe that contain the substring in the defined column"""
     if not sub_string:
-        logger.error(f'sub_string is empty whole dataframe will be returned')
+        logger.info(f'sub_string is empty whole dataframe will be returned')
         return df
 
     df = df[df[column.value].str.contains(sub_string)]
-    logger.info(f'filtered tweets by column {TweetColumns.TEXT} containing {sub_string}')
+    logger.info(f'filtered tweets by column {TweetColumns.TEXT.value} containing {sub_string}')
     return df
 
 
 def _query_tweets_by_date(df: pd.DataFrame, date_from: datetime = None, date_to: datetime = None):
-    if not date_from and not date_to:
-        logger.warning(f'No date passed, whole dataframe (all tweets) will be returned!')
-        return df
-    elif not date_from:
-        logger.info(f'filter tweets from begin until {date_to}')
-        return df[df[TweetColumns.TIMESTAMP] < date_to]
-    elif not date_to:
-        logger.info(f'filter tweets from {date_from} until end')
-        return df[df[TweetColumns.TIMESTAMP] > date_from]
-
-
-def try_remove_file(dest_file: Path):
-    """wrapper method to remove files with logging"""
-    if os.path.exists(dest_file):
-        os.remove(dest_file)
-        logger.info(f'removed file {dest_file} cause of new request')
-    else:
-        logger.info(f'file or directory not found {dest_file}')
-
-
-def exists_file(file: Path):
-    """wrapper method to check if a file exists with logging"""
-    if not os.path.exists(file):
-        logger.error(f'file or directory not found {file}')
-        return False
-    return True
-
-
-def is_file_empty(file: Path):
-    """wrapper method to check whether a file is empty with logging"""
-    if os.stat("file").st_size == 0:
-        logger.warning(f'file is empty {file}')
-        return True
-    return False
-
-
-def create_json(df: pd.DataFrame, dest_file: Path):
-    try_remove_file(dest_file)
-    df.to_json(dest_file, orient='split', index=False, indent=4)
-    logger.info(f'created file {dest_file} cause of new request')
-
-
-def get_tweets_from_csv(tweets_file_path: Path):
-    if exists_file(tweets_file_path) or not is_file_empty(tweets_file_path):
-        return pd.read_csv(tweets_file_path)
-    raise FileNotFoundError(f'File does not exist or is empty')
+    """Returns all entries from a Dataframe that are in the time span. In case no time span
+    is overgiven the whole Dataframe will be returned"""
+    logger.info(f'filtered dataframe by date from {date_from} to {date_to}')
+    df = df[df[TweetColumns.TIMESTAMP.value] >= date_from] if date_from is not None else df
+    return df[df[TweetColumns.TIMESTAMP.value] <= date_to] if date_to is not None else df

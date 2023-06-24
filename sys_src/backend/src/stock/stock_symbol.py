@@ -1,12 +1,18 @@
 import csv
 import os
+import sys
+import backend.src.stockbird_logger as stockbird_logger
+
+logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 #falls manuelle eingabe checken ob name passt
-def isReallyCsvForm(Eingab):
-    if Eingab[-1] == "v" and Eingab[-2] == "s" and Eingab[-3] == "c" and Eingab[-4] == ".":
-        return Eingab
+def isReallyCsvForm(eingab):
+    if eingab[-1] == "v" and eingab[-2] == "s" and eingab[-3] == "c" and eingab[-4] == ".":
+        logger.info('name is ok')
+        return eingab
     else:
-        print("CSV Format nicht eingehalten, bitte Dateinamen mit .csv enden lassen")
+        logger.info(f'"{eingab}" is not csv format, please end filename with .csv')
+        pass
 
 #bei automatischer namengebung -> grundname mit aufsteigender Endzahl
 def autoNaming():
@@ -16,6 +22,7 @@ def autoNaming():
     while (True):
         check = os.path.exists(directory)
         if check:
+            logger.info(f'"{directory}" is already used')
             counter += 1
             if counter > 1:
                 directory = directory[::-1]
@@ -28,19 +35,18 @@ def autoNaming():
                 continue
         else:
             break
+    logger.info(f'"{directory}" is the path to the domkument')
     return directory
 
 #abspeichern der dictionary als csv Datei
-def print_csv(DatName, Eingab):
-    mydict = Eingab
+def print_csv(datName, eingab):
+    mydict = eingab
     filename = DatName
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Abk', 'Name'])
         for key, value in mydict.items():
             writer.writerow([key, value])
+    logger.info(f'csv file created with name "{datName}"')
 
-
-if __name__ == '__main__':
-    print_csv(autoNaming(),{"a": "aachens auflauf galerie", "b": "bertholds buch brochüren", "c": "chammaleon can clim", "d": "durst durch daniel", "e": "emil eignet emma"} )
 
