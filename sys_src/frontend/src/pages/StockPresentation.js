@@ -211,8 +211,8 @@ export default function StockPresentation() {
     //defines the state variable for the selected daterange
     const [date, setDate] = useState(null);
 
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     return ( 
         <>
