@@ -166,8 +166,8 @@ export default function StockPresentation() {
           }
       
           function formatDate(timestamp) {
-            const date = new Date(timestamp);
-            const formattedDateTime = date.toLocaleDateString(); 
+            const formattedDate = new Date(timestamp);
+            const formattedDateTime = formattedDate.toLocaleDateString(); 
             return formattedDateTime;
           }
       
@@ -204,14 +204,17 @@ export default function StockPresentation() {
             setLoading(false);
             console.log(startDate);
             console.log(endDate);
+            console.log(date);
         }
     };
 
-    //defines the state variables for the selected start and end date
+    //defines the state variable for the selected daterange
+    const [date, setDate] = useState(null);
+
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
-    return (
+    return ( 
         <>
             <div>
               <div className="spHeader">
@@ -239,10 +242,9 @@ export default function StockPresentation() {
                         <DateRangePicker
                           className="datePicker"
                           localeText={{ start: 'Twitter analysis start', end: 'Twitter analysis end' }}
-                          start={startDate}
-                          end={endDate}
-                          onChange={(newStart, newEnd) => {
-                            setStartDate(newStart.toLocaleString('en-US', {
+                          date={date}
+                          onChange={(newDate) => {
+                            setDate(newDate.toLocaleString('en-US', {
                               year: '2-digit',
                               month: '2-digit',
                               day: '2-digit',
@@ -250,15 +252,10 @@ export default function StockPresentation() {
                               minute: '2-digit',
                               second: '2-digit',
                             }));
-                            setEndDate(newEnd.toLocaleString('en-US', {
-                              year: '2-digit',
-                              month: '2-digit',
-                              day: '2-digit',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              second: '2-digit',
-                            }));
-                          }}
+                            setStartDate(newDate?.[0]?.toLocaleString());
+                            setEndDate(newDate?.[1]?.toLocaleString());
+                          }
+                        }
                         />
                       </LocalizationProvider>
                       <Button
