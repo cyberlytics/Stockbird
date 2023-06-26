@@ -103,3 +103,23 @@ def query_stock_by_date(to_filter: str, from_date: str, to_date: str):
     filtered_df = df.loc[(df.index >= dt_from_date) & (df.index <= dt_to_date)]
     logger.info(f'Data from the {from_date} up till the {to_date}')
     return filtered_df
+
+
+def query_stock_substrings_by_symbol(symbol: str):
+    """Diese Funktion soll zu gegebenen stock_symbol die jeweiligen substrings aus dem 'stock_info.json' file,
+        aus dem stockbird_res S3 Bucket beziehen und diese als String zurueckgeben"""
+    json_data = s3.read_json("stock_info.json")
+    df = pd.DataFrame(json_data)
+
+    substrings = []
+    logger.info(f'Looking for symbol in stock_info')
+
+    for item in df['data']:
+        if item['stock_symbol'] == symbol:
+            logger.info(f'Found symbol in stock_info')
+            substrings = item['stock_strings']
+            break
+
+    result = ', '.join(substrings)
+    logger.info(f'substrings returned: {result}')
+    return result

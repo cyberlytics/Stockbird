@@ -53,6 +53,14 @@ def _query_tweets_by_stock(event):
     logger.info(f'Tweets concerning "{event["substrings"]}"')
     return json.dumps(df_json)
 
+def _query_tweets_by_stock_info(event):
+    """Diese Funktion gibt alle Tweets zurück, welche die übergebenen schlagwörter im Text beinhalten.
+    Optional kann nach datum eingeschränkt werden.
+    Die Schlagwoerter werden ueber _query_stock_substrings_by_symbol() aus 'stock_info.json' nach event["symbol"] bezogen."""
+    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event['date_to'],
+                                                stock_data.query_stock_substrings_by_symbol(event['symbol']))
+    logger.info(f'Tweets concerning "{event["substrings"]}"')
+    return json.dumps(df_json)
 
 def _query_relevant_tweets_by_stock(event):
     """Diese Funktion soll zu dem gegebenen Stock automatisch relevante Tweets returned. Diese Tweets werden nach
@@ -61,6 +69,11 @@ def _query_relevant_tweets_by_stock(event):
     logger.info(f'All Tweets concerning the "{event}" stock')
     return ''
 
+def _query_stock_substrings_by_symbol(event):
+    """Diese Funktion soll zu gegebenen stock_symbol die jeweiligen substrings aus dem 'stock_info.json' file,
+        aus dem stockbird_res S3 Bucket beziehen und diese als String zurueckgeben"""
+    df_json = stock_data.query_stock_substrings_by_symbol(event['symbol'])
+    return json.dumps(df_json)
 
 def lambda_handler(event, context):
     atexit.register(stockbird_logger.write_log)
