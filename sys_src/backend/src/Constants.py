@@ -35,4 +35,5 @@ ACCESS_KEY_ID = 'AKIATKBDO35QY726HY7J'
 ACCESS_KEY = 'vJMAK2okWZrzv1umRgMGKqQ8FHs9NYyAjWDBhVdV'
 BUCKET = 'stockbird-res'
 
+# date format that is given from the frontend
 FRONTEND_DATE_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
