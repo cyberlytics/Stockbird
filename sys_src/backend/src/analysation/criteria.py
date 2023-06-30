@@ -60,8 +60,11 @@ class Criteria:
     def calc_points(self, data: pd.DataFrame) -> pd.DataFrame:
         """Berechnet die erreichten Punkte."""
         data.reset_index(inplace=True, drop=True)
+        # TODO diese If ist nur notlösung wegen bugfix, eigentlich sollt der Fall das es keinen Datensatz gibt, welcher
+        #  gleich ist gar nicht auftreten!
         data['points'] += data.apply(lambda x: self.points /
-                                               (data[data[self.column] == x[self.column]].iloc[0].name + 1),
+                                               (data[data[self.column] == x[self.column]].iloc[0].name + 1)
+                                     if len(data[data[self.column] == x[self.column]]) != 0 else 0,
                                      axis=1, result_type='reduce')
         return data
 

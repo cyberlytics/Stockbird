@@ -49,7 +49,7 @@ def _query_tweets(event):
 def _query_tweets_by_stock(event):
     """Diese Funktion gibt alle Tweets zurück, welche die übergebenen schlagwörter im Text beinhalten.
     Optional kann nach datum eingeschränkt werden"""
-    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event['date_to'],
+    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event.get('date_to'),
                                                 event['substrings'])
     logger.info(f'Tweets concerning "{event["substrings"]}"')
     return json.dumps(df_json)
@@ -77,7 +77,7 @@ def _query_relevant_tweets_by_stock(event):
     df = tweet_utils.query_relevant_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event.get('date_to'), '')
     return json.dumps(twitter_analysis.query_relevant_tweets_by_stock(df,
                                                                       event['symbol'],
-                                                                      event.get('substrings', default='')))
+                                                                      event.get('substrings')))
 
 
 def _query_stock_substrings_by_symbol(event):

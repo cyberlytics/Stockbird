@@ -23,7 +23,8 @@ def sort_common_substrings(data: pd.DataFrame):
 
 
 def _get_common_substrings():
-    return stock_data.query_stock_substrings_by_symbol(stock_symbol).split(', ') + stock_substrings.split(', ')
+    subs = stock_data.query_stock_substrings_by_symbol(stock_symbol).split(', ')
+    return subs if stock_substrings == '' else subs + stock_substrings.split(', ')
 
 
 def _count_substrings(data: pd.DataFrame):
@@ -60,11 +61,11 @@ def sort_retweets(data: pd.DataFrame):
     return data.sort_values(by=TweetColumns.RETWEETS.value, ascending=False)
 
 
-def query_relevant_tweets_by_stock(data: pd.DataFrame, symbol, substrings) -> str:
+def query_relevant_tweets_by_stock(data: pd.DataFrame, symbol, substrings='') -> str:
     """Schnittstelle zur lambda_api.py und zur criteria.py. Diese Methode setzt nur die übergebenen Parameter vom
        Frontend und ruft die entsprechende Methode in criteria.py auf."""
     global stock_symbol, stock_substrings
     stock_symbol = symbol
-    stock_substrings = substrings
+    stock_substrings = substrings if substrings is not None else ''
 
     return criteria.execute_relevant_tweets(data).to_json(orient='split', index=False, indent=4)
