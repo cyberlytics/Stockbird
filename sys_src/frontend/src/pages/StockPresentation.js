@@ -15,7 +15,6 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { callAPITweets } from './api';
 import RotateLoader from "react-spinners/RotateLoader";
 
-
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -50,13 +49,16 @@ export default function StockPresentation() {
     //If tweets are available for a stock, then it should display it, if not there should be a message
     const [tweets,setTweets] = useState(true);
 
+    var substrings;
+
     //here we map our symbols to the corresponding name of the Company which is necessary for receiving the right tweets
     const symbolMapping = {
         'TSLA': 'Tesla',
         'AAPL': 'Apple',
         'GOOG': 'Google',
         'DOGE-USD': 'Dogecoin',
-        'BTC-USD': 'Bitcoin'
+        'BTC-USD': 'Bitcoin',
+        'EXL.DE': 'Exasol'
     };
 
     //in this variable we store in the symbol because in the api.js we need a substring for the backend for filtering the tweets where for example 'Dogecoin' is included the tweet
@@ -68,9 +70,11 @@ export default function StockPresentation() {
     //if symbol can't be mapped, we have to save the symbol as secondParameter
     if (secondParameter === undefined) {
       secondParameter = symbol;
+      substrings = symbol;
     }
     else {
       titleMapped = " - " + secondParameter;
+      substrings = secondParameter + "," + symbol;
     }
 
     //draws the chart when the stock-data is available
@@ -135,7 +139,7 @@ export default function StockPresentation() {
             .append('path')
             .datum(data)
             .attr('fill', 'none')
-            .attr('stroke', 'steelblue')
+            .attr('stroke', '#249BEB')
             .attr('stroke-width', 1.5)
             .attr('d', line);
       
@@ -176,15 +180,15 @@ export default function StockPresentation() {
           }
     };
 
-    //this function gets triggered when the 'Analyze' button is clicked
+    //this function gets triggered when the 'Analyze' or the 'Sort by influence' button is clicked
     //with this function we call the 'callAPITweets' which is defined in the 'api.js'
     //we store all the information we get from the 'callAPITweets' in the jsonDataTweet
-    const handleAnalyzeClick = async () => {
+    const handleAnalyzeClick = async (control) => {
         try {
             //set the loading animation to true
             setLoading(true);
 
-            const apiTweets = await callAPITweets('_query_tweets_by_stock', startDate, endDate, secondParameter);
+            const apiTweets = await callAPITweets(control, startDate, endDate, substrings, symbol);
             const jsonDataTweet = JSON.parse(apiTweets);
             setTweets(true);
             //here we set the tweetData value to the tweets we get back, but here are some information we don't need
@@ -236,7 +240,10 @@ export default function StockPresentation() {
                     spacing={2}
                   >
                     <div>
-                      <Typography variant="h3">{symbol + titleMapped}</Typography>
+                      <Typography 
+                        variant="h3"
+                        color="#249BEB"
+                      >{symbol + titleMapped}</Typography>
                       <div ref={chartRef}></div>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
@@ -261,26 +268,39 @@ export default function StockPresentation() {
                       <Button
                           id="analyzeBtn"
                           variant="contained"
-                          onClick={handleAnalyzeClick}
+                          onClick={() => handleAnalyzeClick('_query_tweets_by_stock')}
                           disabled={loading}
                       >
                         Analyze
                       </Button>
-                        <RotateLoader
-                            loading={loading}
-                            size={20}
-                            color="blue"/>
                     </div>
                     <div>
                       <Stack className='tweetStack' spacing={2}>
+                        <RotateLoader
+                          loading={loading}
+                          size={20}
+                          color="#249BEB"
+                        />
                         {data && data.length > 0 ? (
-                          data.map((row, index) => (
-                            <Item key={index}>
-                              <Typography variant="body2">{row[0]}</Typography>
-                              <Typography variant="body2">{new Date(row[2]).toLocaleDateString()}</Typography>
-                              <Typography variant="body2">{row[3]}</Typography>
-                            </Item>
-                          ))
+                          <>
+                          {/** The following section is only shown when there are tweets for the stock available */}
+                            <Typography variant="body2">* calculated by the Stockbird team</Typography>
+                            <Button 
+                              id="influenceBtn" 
+                              variant="contained" 
+                              onClick={() => handleAnalyzeClick('_query_relevant_tweets_by_stock')}
+                              disabled={loading}
+                            >
+                              Sort by influence *
+                            </Button>
+                            {data.map((row, index) => (
+                              <Item key={index}>
+                                <Typography variant="body2">{row[0]}</Typography>
+                                <Typography variant="body2">{new Date(row[2]).toLocaleDateString()}</Typography>
+                                <Typography variant="body2">{row[3]}</Typography>
+                              </Item>
+                            ))}
+                          </>
                         ) : (
                           <Typography variant="body2" style={{ backgroundColor: !tweets ? '#ffb3b3' : 'aliceblue', padding: '30px' }}>
                               {!tweets ? 'Found no tweets of this stock.' : ' Try to analyze tweets by selecting a time and clicking the button.'}

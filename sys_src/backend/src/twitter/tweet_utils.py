@@ -8,16 +8,8 @@ logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 
 def query_tweets_by_stock(tweets_file_name: str, date_from, date_to, substrings: str):
-    df = s3.read_csv(tweets_file_name)
-    result_df = pd.DataFrame(data=None, columns=df.columns)
-    for stock_name in substrings.split(','):
-        result_df = pd.concat([result_df, _query_tweets_by_substring(df, TweetColumns.TEXT, stock_name)])
-    result_df = _query_tweets_by_date(result_df,
-                                      datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
-                                      .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
-                                      datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
-                                      .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
-    return result_df.to_json(orient='split', index=False, indent=4)
+    return _query_tweets_by_stock(tweets_file_name, date_from, date_to, substrings)\
+        .to_json(orient='split', index=False, indent=4)
 
 
 def query_tweets(tweets_file_name: str, date_from, date_to):
@@ -28,6 +20,22 @@ def query_tweets(tweets_file_name: str, date_from, date_to):
                                datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
                                .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
     return df.to_json(orient='split', index=False, indent=4)
+
+
+def query_relevant_tweets_by_stock(tweets_file_name: str, date_from, date_to, substrings: str):
+    return _query_tweets_by_stock(tweets_file_name, date_from, date_to, substrings)
+
+
+def _query_tweets_by_stock(tweets_file_name: str, date_from, date_to, substrings: str):
+    df = s3.read_csv(tweets_file_name)
+    result_df = pd.DataFrame(data=None, columns=df.columns)
+    for stock_name in substrings.split(','):
+        result_df = pd.concat([result_df, _query_tweets_by_substring(df, TweetColumns.TEXT, stock_name)])
+    return _query_tweets_by_date(result_df,
+                                 datetime.datetime.strptime(date_from, FRONTEND_DATE_FORMAT)
+                                 .replace(tzinfo=datetime.timezone.utc) if date_from is not None else None,
+                                 datetime.datetime.strptime(date_to, FRONTEND_DATE_FORMAT)
+                                 .replace(tzinfo=datetime.timezone.utc) if date_to is not None else None)
 
 
 def _query_tweets_by_substring(df: pd.DataFrame, column: TweetColumns, sub_string: str):

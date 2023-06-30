@@ -84,7 +84,7 @@ export default function Home() {
                     <RotateLoader
                         loading={loading}
                         size={20}
-                        color="blue"/>
+                        color="#249BEB"/>
                 </div>
                 <footer className="footer">
                     <Typography variant='body2' align='center' gutterBottom>
