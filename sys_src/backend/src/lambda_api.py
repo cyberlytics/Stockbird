@@ -8,9 +8,6 @@ import stockbird_logger
 from sys_src.backend.src.Constants import *
 
 
-# define the handler function that the Lambda service will use as an entry point
-# TODO: Abfragen der Stock data in eine API-Funktion schreiben, die je nach übergegebenen Parametern die passende Funktion aufruft
-
 logger = stockbird_logger.get_logger(LOGGER_NAME)
 
 
@@ -61,8 +58,9 @@ def _query_tweets_by_stock(event):
 def _query_tweets_by_stock_info(event):
     """Diese Funktion gibt alle Tweets zurück, welche die übergebenen schlagwörter im Text beinhalten.
     Optional kann nach datum eingeschränkt werden.
-    Die Schlagwoerter werden ueber _query_stock_substrings_by_symbol() aus 'stock_info.json' nach event["symbol"] bezogen."""
-    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event['date_to'],
+    Die Schlagwoerter werden ueber _query_stock_substrings_by_symbol() aus 'stock_info.json' nach event["symbol"]
+    bezogen."""
+    df_json = tweet_utils.query_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event.get('date_to'),
                                                 stock_data.query_stock_substrings_by_symbol(event['symbol']))
     logger.info(f'Tweets concerning "{event["substrings"]}"')
     return json.dumps(df_json)
@@ -70,12 +68,16 @@ def _query_tweets_by_stock_info(event):
 
 def _query_relevant_tweets_by_stock(event):
     """Diese Funktion soll zu dem gegebenen Stock automatisch relevante Tweets returned. Diese Tweets werden nach
-       relevanz sortiert zurückgegeben. """
-    # TODO wird zu einen späteren Zeitpunkt noch ausprogrammiert! (Analyseebene 3)
+       relevanz sortiert zurückgegeben. Die Methode braucht dabei vom Frontend folgende Übergabeparameter:
+       'symbol' (verpflichtend, wird benötigt, um die Substrings zu erweitern)
+       'substrings' (optional, kann für ein Kriterium verwendet werden)
+       'date_from' (optional, kann für die einschränkung auf das Datum verwendet werden)
+       'date_to' (optional, kann für die einschränkung auf das Datum verwendet werden)"""
     logger.info(f'All Tweets concerning the "{event}" stock')
-    df = tweet_utils.query_relevant_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event['date_to'],
-                                                    stock_data.query_stock_substrings_by_symbol(event['symbol']))
-    return twitter_analysis.query_relevant_tweets_by_stock(df)
+    df = tweet_utils.query_relevant_tweets_by_stock(TWEETS_FILENAME, event.get('date_from'), event.get('date_to'), '')
+    return json.dumps(twitter_analysis.query_relevant_tweets_by_stock(df,
+                                                                      event['symbol'],
+                                                                      event.get('substrings', default='')))
 
 
 def _query_stock_substrings_by_symbol(event):
@@ -86,6 +88,7 @@ def _query_stock_substrings_by_symbol(event):
 
 
 def lambda_handler(event, context):
+    """Lambda-Schnittstelle zum Frontend"""
     atexit.register(stockbird_logger.write_log)
     return {
         'statusCode': 200,

@@ -117,9 +117,8 @@ def query_stock_substrings_by_symbol(symbol: str):
     for item in df['data']:
         if item['stock_symbol'] == symbol:
             logger.info(f'Found symbol in stock_info')
-            substrings = item['stock_strings']
+            substrings = item['stock_strings'] + [item['stock_symbol'], item['stock_name']]
             break
-
-    result = ', '.join(substrings)
+    result = ', '.join(substrings if len(substrings) > 1 else [symbol])
     logger.info(f'substrings returned: {result}')
     return result

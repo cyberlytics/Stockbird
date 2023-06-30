@@ -18,6 +18,7 @@ TWEETS_FILENAME = 'tweets.csv'
 SYMBOL_GERMANY_FILENAME = 'SymbolsGermany.csv'
 SYMBOL_USA_FILENAME = 'SymbolsUSA.csv'
 LOG_FILENAME = f'stockbird-{datetime.date.today().strftime("%Y-%m-%d")}.log'
+STOCK_INFO = "stock_info.json"
 
 # All relevant path
 SYS_SRC_PATH = Path(__file__).absolute().parent.parent.parent
